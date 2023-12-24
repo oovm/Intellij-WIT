@@ -1,19 +1,19 @@
 {
-    parserClass = "com.github.bytecodealliance.language.parser.WitParser"
+    parserClass = "com.github.bytecodealliance.language.parser.WionParser"
     parserUtilClass = "com.github.bytecodealliance.language.psi.ParserExtension"
 
-    extends = "com.github.bytecodealliance.language.psi.WitElement"
+    extends = "com.github.bytecodealliance.language.psi.WionElement"
 
-    psiClassPrefix = "Wit"
+    psiClassPrefix = "Wion"
     psiImplClassSuffix = "Node"
     psiPackage = "com.github.bytecodealliance.language.psi"
     psiImplPackage = "com.github.bytecodealliance.language.psi_node"
 
-    elementTypeHolderClass = "com.github.bytecodealliance.language.psi.WitTypes"
-    elementTypeClass = "com.github.bytecodealliance.language.psi.WitElementType"
-    tokenTypeClass = "com.github.bytecodealliance.language.psi.WitTokenType"
+    elementTypeHolderClass = "com.github.bytecodealliance.language.psi.WionTypes"
+    elementTypeClass = "com.github.bytecodealliance.language.psi.WionElementType"
+    tokenTypeClass = "com.github.bytecodealliance.language.psi.WionTokenType"
 
-    psiImplUtilClass = "com.github.bytecodealliance.language.psi_node.FluentPsiExtension"
+    psiImplUtilClass = "com.github.bytecodealliance.language.psi_node.PsiExtension"
 
     tokens = [
         // comment
@@ -76,7 +76,7 @@
 }
 
 // https://github.com/bytecodealliance/fluent/blob/master/spec/fluent.ebnf
-wit ::= statements*
+wion ::= statements*
 private statements ::=
     package
   | world

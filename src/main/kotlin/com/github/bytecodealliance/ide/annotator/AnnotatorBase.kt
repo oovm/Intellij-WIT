@@ -17,6 +17,9 @@ abstract class AnnotatorBase : Annotator {
         }
     }
 
+
+
+
     protected abstract fun annotateInternal(element: PsiElement, holder: AnnotationHolder)
 
     companion object {
@@ -29,4 +32,3 @@ abstract class AnnotatorBase : Annotator {
         }
     }
 }
-

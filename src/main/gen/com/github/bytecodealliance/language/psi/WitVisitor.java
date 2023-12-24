@@ -91,10 +91,6 @@ public class WitVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitOrganizationName(@NotNull WitOrganizationName o) {
-    visitPsiElement(o);
-  }
-
   public void visitPackage(@NotNull WitPackage o) {
     visitPsiElement(o);
   }

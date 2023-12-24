@@ -3,7 +3,7 @@ package com.github.bytecodealliance.language.parser;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static com.github.bytecodealliance.language.psi.WitTypes.*;
+import static com.github.bytecodealliance.language.psi.WionTypes.*;
 import static com.github.bytecodealliance.language.psi.ParserExtension.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
@@ -12,7 +12,7 @@ import com.intellij.lang.PsiParser;
 import com.intellij.lang.LightPsiParser;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
-public class WitParser implements PsiParser, LightPsiParser {
+public class WionParser implements PsiParser, LightPsiParser {
 
   public ASTNode parse(IElementType t, PsiBuilder b) {
     parseLight(t, b);
@@ -32,7 +32,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
-    return wit(b, l + 1);
+    return wion(b, l + 1);
   }
 
   /* ********************************************************** */
@@ -1152,12 +1152,12 @@ public class WitParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // statements*
-  static boolean wit(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "wit")) return false;
+  static boolean wion(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "wion")) return false;
     while (true) {
       int c = current_position_(b);
       if (!statements(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "wit", c)) break;
+      if (!empty_element_parsed_guard_(b, "wion", c)) break;
     }
     return true;
   }

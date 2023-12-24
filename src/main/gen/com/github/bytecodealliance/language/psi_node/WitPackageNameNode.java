@@ -29,14 +29,8 @@ public class WitPackageNameNode extends WitElement implements WitPackageName {
 
   @Override
   @NotNull
-  public WitModuleName getModuleName() {
-    return findNotNullChildByClass(WitModuleName.class);
-  }
-
-  @Override
-  @Nullable
-  public WitOrganizationName getOrganizationName() {
-    return findChildByClass(WitOrganizationName.class);
+  public List<WitModuleName> getModuleNameList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitModuleName.class);
   }
 
   @Override

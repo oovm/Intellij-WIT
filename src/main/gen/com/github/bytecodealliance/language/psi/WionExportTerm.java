@@ -5,12 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface WitPackageName extends PsiElement {
-
-  @NotNull
-  List<WitModuleName> getModuleNameList();
+public interface WionExportTerm extends PsiElement {
 
   @Nullable
-  WitPackageVersion getPackageVersion();
+  WionFunction getFunction();
+
+  @Nullable
+  WionIncludeName getIncludeName();
+
+  @Nullable
+  WionInlineInterface getInlineInterface();
 
 }

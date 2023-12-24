@@ -29,7 +29,6 @@ public interface WitTypes {
   IElementType METHOD = new WitElementType("METHOD");
   IElementType MODIFIER = new WitElementType("MODIFIER");
   IElementType MODULE_NAME = new WitElementType("MODULE_NAME");
-  IElementType ORGANIZATION_NAME = new WitElementType("ORGANIZATION_NAME");
   IElementType PACKAGE = new WitElementType("PACKAGE");
   IElementType PACKAGE_NAME = new WitElementType("PACKAGE_NAME");
   IElementType PACKAGE_VERSION = new WitElementType("PACKAGE_VERSION");
@@ -164,9 +163,6 @@ public interface WitTypes {
       }
       else if (type == MODULE_NAME) {
         return new WitModuleNameNode(node);
-      }
-      else if (type == ORGANIZATION_NAME) {
-        return new WitOrganizationNameNode(node);
       }
       else if (type == PACKAGE) {
         return new WitPackageNode(node);
