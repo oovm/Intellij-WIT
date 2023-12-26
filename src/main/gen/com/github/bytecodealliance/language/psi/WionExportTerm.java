@@ -8,12 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface WionExportTerm extends PsiElement {
 
   @Nullable
+  WionDictItem getDictItem();
+
+  @Nullable
   WionFunction getFunction();
 
   @Nullable
-  WionIncludeName getIncludeName();
-
-  @Nullable
-  WionInlineInterface getInlineInterface();
+  WionListItem getListItem();
 
 }

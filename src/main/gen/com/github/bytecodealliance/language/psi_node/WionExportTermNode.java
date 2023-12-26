@@ -29,20 +29,20 @@ public class WionExportTermNode extends WionElement implements WionExportTerm {
 
   @Override
   @Nullable
+  public WionDictItem getDictItem() {
+    return findChildByClass(WionDictItem.class);
+  }
+
+  @Override
+  @Nullable
   public WionFunction getFunction() {
     return findChildByClass(WionFunction.class);
   }
 
   @Override
   @Nullable
-  public WionIncludeName getIncludeName() {
-    return findChildByClass(WionIncludeName.class);
-  }
-
-  @Override
-  @Nullable
-  public WionInlineInterface getInlineInterface() {
-    return findChildByClass(WionInlineInterface.class);
+  public WionListItem getListItem() {
+    return findChildByClass(WionListItem.class);
   }
 
 }

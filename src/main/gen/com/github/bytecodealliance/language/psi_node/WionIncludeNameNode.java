@@ -35,8 +35,8 @@ public class WionIncludeNameNode extends WionElement implements WionIncludeName 
 
   @Override
   @NotNull
-  public WionInterfaceName getInterfaceName() {
-    return findNotNullChildByClass(WionInterfaceName.class);
+  public WionListItem getListItem() {
+    return findNotNullChildByClass(WionListItem.class);
   }
 
   @Override

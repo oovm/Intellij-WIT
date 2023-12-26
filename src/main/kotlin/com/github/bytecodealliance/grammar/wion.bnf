@@ -76,164 +76,32 @@
 }
 
 // https://github.com/bytecodealliance/fluent/blob/master/spec/fluent.ebnf
-wion ::= statements*
-private statements ::=
-    package
-  | world
-  | dict-object
+wion ::=
+	dict-object
   | list-object
-  | SEMICOLON
-
-// package wasi:blobstore@0.2.0-draft;
-package ::= KW_PACKAGE package-name {
-	pin = 1
-//    mixin = "com.github.bytecodealliance.language.mixin.MixinPackage"
-}
-// namespace:package@2024.2.4-semver/module_function
-package-name ::= module-name (COLON module-name)* package-version?;
-package-version ::= AT VERSION;
+  | variant-object
 // world name { }
-world ::= modifier? KW_WORLD identifier BRACE_L world-element* BRACE_R {
-	pin = 2
+variant-object ::= identifier PARENTHESIS_L variant-item? PARENTHESIS_R {
 //    mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
 }
-private world-element ::= SEMICOLON
-	| dict-object
-	| import
-	| export
-	| use
-	| define-type
-	| enum
-	| variant
-	| record
-	| resource
-	| COMMENT_LINE
+variant-item ::= dict-object
 // include wasi:keyvalue/imports@0.2.0-draft;
-dict-object ::= KW_INCLUDE include-name {
-	pin = 1
+dict-object ::= identifier? BRACE_L (dict-item (COMMA dict-item)* COMMA?)? BRACE_R {
 //    mixin = "com.github.bytecodealliance.language.mixin.MixinInclude"
 }
-include-name ::=
-    identifier (COLON identifier) (SLASH interface-name) package-version?
-  | interface-name
-// import imports;
-// import error-code: func(err: u32) -> option<u32>;
-// export imports;
-// export my:dep/a@0.2.0;
-import    ::= KW_IMPORT export-term {
-	pin = 1
-}
-export    ::= KW_EXPORT export-term {
-	pin = 1
-}
-export-term ::= function
-	| inline-interface
-	| include-name
-//  use wasi:poll/poll.{pollable};
-//  use wasi:io/streams@0.2.0.{input-stream, output-stream};
-use      ::= KW_USE include-name use-items? {
-	pin = 1
-}
-use-items ::= DOT BRACE_L (use-alias (COMMA use-alias)* COMMA?)? BRACE_R {
-	pin = 1
-}
-use-alias ::= identifier (KW_AS alias-name)? {
-
-}
-
+dict-item ::= identifier;
 // interface name { }
-list-object ::= KW_INTERFACE interface-name interface-body {
-	pin = 1
+list-object ::= BRACKET_L (list-item (COMMA list-item)* COMMA?)? BRACKET_R {
 //    mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
 }
 // exports: interface
-inline-interface ::= interface-name COLON KW_INTERFACE interface-body {
-	pin = 3
+list-item ::= identifier {
 //	extends = interface
 //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
 }
-interface-body ::= BRACE_L interface-element* BRACE_R;
-private interface-element ::= SEMICOLON
-	| use
-	| define-type
-	| resource
-	| record
-	| flags
-	| enum
-	| variant
-	| function
-// get-insecure-random-bytes: func(len: u64) -> list<u8>;
-method ::= identifier COLON function-signature {
-//	mixin = "com.github.bytecodealliance.language.mixin.MixinMethod"
-}
-constructor ::= KW_CONSTRUCTOR tuple (TO type-hint)? {
-	pin = 1
-}
-function ::= identifier COLON function-signature {
-//	mixin = "com.github.bytecodealliance.language.mixin.MixinFunction"
-}
-function-signature ::= modifier? KW_FUNCTION tuple (TO type-hint)? {
-	pin = 2
-}
-
-// type type-name = type-hint;
-define-type ::= KW_TYPE identifier EQ type-hint {
-	pin = 1
-}
-type-hint ::= tuple | type-generic;
-type-generic ::= identifier generic?;
-tuple ::= PARENTHESIS_L (parameter (COMMA parameter)* COMMA?)? PARENTHESIS_R;
-parameter ::= identifier COLON type-hint {
-
-}
-generic   ::= ANGLE_L (type-hint (COMMA type-hint)* COMMA?)? ANGLE_R;
-// resource type-name { method: func() };
-resource  ::= KW_RESOURCE identifier (BRACE_L resource-element* BRACE_R)? {
-	pin = 1
-//    mixin = "com.github.bytecodealliance.language.mixin.MixinResource"
-}
-private resource-element ::=
-    method
-  | constructor
-  | SEMICOLON
-// record type-name { field: type-hint, key: value };
-record   ::= KW_RECORD identifier BRACE_L record-element* BRACE_R {
-	pin = 1
-//    mixin = "com.github.bytecodealliance.language.mixin.MixinRecord"
-}
-private record-element ::=
-    record-field
-  | COMMA
-
-record-field    ::= identifier COLON type-hint {
-//    mixin = "com.github.bytecodealliance.language.mixin.MixinField"
-}
-
-
-flags       ::= KW_FLAGS identifier BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R {
-	pin = 1
-//    mixin = "com.github.bytecodealliance.language.mixin.MixinFlags"
-}
-enum       ::= KW_ENUM identifier BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R {
-	pin = 1
-}
-
-
-variant          ::= KW_VARIANT identifier BRACE_L (variant-item (COMMA variant-item)* COMMA?)? BRACE_R {
-	pin = 1
-//    mixin = "com.github.bytecodealliance.language.mixin.MixinVariant"
-}
-variant-item 	 ::= identifier (PARENTHESIS_L type-hint PARENTHESIS_R)? {
-//    mixin = "com.github.bytecodealliance.language.mixin.MixinVariantItem"
-}
-
 
 /* Literals */
 
 /* Identifier */
-modifier            ::= SYMBOL;
-module-name         ::= SYMBOL | ESCAPED;
-interface-name      ::= SYMBOL | ESCAPED;
 alias-name          ::= SYMBOL | ESCAPED;
-semantic-number     ::= SYMBOL | ESCAPED;
 identifier          ::= SYMBOL | ESCAPED;

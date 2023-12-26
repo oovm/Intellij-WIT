@@ -11,6 +11,9 @@ public interface WionWorld extends PsiElement {
   List<WionDefineType> getDefineTypeList();
 
   @NotNull
+  List<WionDictObject> getDictObjectList();
+
+  @NotNull
   List<WionEnum> getEnumList();
 
   @NotNull
@@ -21,9 +24,6 @@ public interface WionWorld extends PsiElement {
 
   @NotNull
   List<WionImport> getImportList();
-
-  @NotNull
-  List<WionInclude> getIncludeList();
 
   @Nullable
   WionModifier getModifier();

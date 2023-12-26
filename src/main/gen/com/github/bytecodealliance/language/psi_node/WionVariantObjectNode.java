@@ -11,14 +11,14 @@ import static com.github.bytecodealliance.language.psi.WionTypes.*;
 import com.github.bytecodealliance.language.psi.WionElement;
 import com.github.bytecodealliance.language.psi.*;
 
-public class WionUseNode extends WionElement implements WionUse {
+public class WionVariantObjectNode extends WionElement implements WionVariantObject {
 
-  public WionUseNode(@NotNull ASTNode node) {
+  public WionVariantObjectNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull WionVisitor visitor) {
-    visitor.visitUse(this);
+    visitor.visitVariantObject(this);
   }
 
   @Override
@@ -28,15 +28,15 @@ public class WionUseNode extends WionElement implements WionUse {
   }
 
   @Override
-  @Nullable
-  public WionDictItem getDictItem() {
-    return findChildByClass(WionDictItem.class);
+  @NotNull
+  public WionIdentifier getIdentifier() {
+    return findNotNullChildByClass(WionIdentifier.class);
   }
 
   @Override
   @Nullable
-  public WionUseItems getUseItems() {
-    return findChildByClass(WionUseItems.class);
+  public WionVariantItem getVariantItem() {
+    return findChildByClass(WionVariantItem.class);
   }
 
 }

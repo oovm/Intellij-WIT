@@ -11,6 +11,6 @@ public interface WionInlineInterface extends PsiElement {
   WionInterfaceBody getInterfaceBody();
 
   @NotNull
-  WionInterfaceName getInterfaceName();
+  WionListItem getListItem();
 
 }

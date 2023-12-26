@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface WionVariantItem extends PsiElement {
 
   @NotNull
-  WionIdentifier getIdentifier();
-
-  @Nullable
-  WionTypeHint getTypeHint();
+  WionDictObject getDictObject();
 
 }

@@ -11,7 +11,7 @@ public interface WionIncludeName extends PsiElement {
   List<WionIdentifier> getIdentifierList();
 
   @NotNull
-  WionInterfaceName getInterfaceName();
+  WionListItem getListItem();
 
   @Nullable
   WionPackageVersion getPackageVersion();

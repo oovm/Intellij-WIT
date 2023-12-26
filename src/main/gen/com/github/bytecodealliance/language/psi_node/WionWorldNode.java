@@ -35,6 +35,12 @@ public class WionWorldNode extends WionElement implements WionWorld {
 
   @Override
   @NotNull
+  public List<WionDictObject> getDictObjectList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, WionDictObject.class);
+  }
+
+  @Override
+  @NotNull
   public List<WionEnum> getEnumList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, WionEnum.class);
   }
@@ -55,12 +61,6 @@ public class WionWorldNode extends WionElement implements WionWorld {
   @NotNull
   public List<WionImport> getImportList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, WionImport.class);
-  }
-
-  @Override
-  @NotNull
-  public List<WionInclude> getIncludeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WionInclude.class);
   }
 
   @Override

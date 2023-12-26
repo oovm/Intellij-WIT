@@ -29,14 +29,8 @@ public class WionVariantItemNode extends WionElement implements WionVariantItem 
 
   @Override
   @NotNull
-  public WionIdentifier getIdentifier() {
-    return findNotNullChildByClass(WionIdentifier.class);
-  }
-
-  @Override
-  @Nullable
-  public WionTypeHint getTypeHint() {
-    return findChildByClass(WionTypeHint.class);
+  public WionDictObject getDictObject() {
+    return findNotNullChildByClass(WionDictObject.class);
   }
 
 }
