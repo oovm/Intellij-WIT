@@ -1,5 +1,6 @@
 package com.github.bytecodealliance.language.file
 
+import com.intellij.icons.ExpUiIcons
 import com.intellij.openapi.util.IconLoader
 import com.intellij.psi.PsiElement
 import javax.swing.Icon
@@ -16,5 +17,6 @@ class WasmIconProvider : com.intellij.ide.IconProvider() {
 
     companion object {
         val Wit = IconLoader.getIcon("/icons/wit.svg", WasmIconProvider::class.java)
+        val Wion = ExpUiIcons.FileTypes.ActionScript
     }
 }

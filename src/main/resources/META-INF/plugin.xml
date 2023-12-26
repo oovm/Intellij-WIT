@@ -16,20 +16,35 @@
 				fieldName="INSTANCE"
 		/>
 		<fileType
-				name="witx"
-				language="witx"
-				extensions="witx;"
+				name="wion"
+				language="wion"
+				extensions="wion;"
 				implementationClass="com.github.bytecodealliance.language.file.WitFileTypeX"
 				fieldName="INSTANCE"
 		/>
+		<fileType
+				name="witx"
+				language="witx"
+				extensions="witx;"
+				implementationClass="com.github.bytecodealliance.language.file.WionFileType"
+				fieldName="INSTANCE"
+		/>
+
 		<lang.parserDefinition
 				language="wit"
 				implementationClass="com.github.bytecodealliance.language.psi.WitParserDefinition"
 		/>
 		<lang.parserDefinition
+				language="wion"
+				implementationClass="com.github.bytecodealliance.language.psi.WionParserDefinition"
+		/>
+		<lang.parserDefinition
 				language="witx"
 				implementationClass="com.github.bytecodealliance.language.psi.WitParserDefinitionX"
 		/>
+
+
+
 		<!-- StructureView -->
 		<lang.psiStructureViewFactory language="wit"
 		                              implementationClass="com.github.bytecodealliance.ide.view.WitStructureViewFactory"/>

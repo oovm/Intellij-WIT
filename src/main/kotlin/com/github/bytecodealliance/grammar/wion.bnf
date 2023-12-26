@@ -80,25 +80,25 @@ wion ::= statements*
 private statements ::=
     package
   | world
-  | include
-  | define-interface
+  | dict-object
+  | list-object
   | SEMICOLON
 
 // package wasi:blobstore@0.2.0-draft;
 package ::= KW_PACKAGE package-name {
 	pin = 1
-    mixin = "com.github.bytecodealliance.language.mixin.MixinPackage"
+//    mixin = "com.github.bytecodealliance.language.mixin.MixinPackage"
 }
-
+// namespace:package@2024.2.4-semver/module_function
 package-name ::= module-name (COLON module-name)* package-version?;
 package-version ::= AT VERSION;
 // world name { }
 world ::= modifier? KW_WORLD identifier BRACE_L world-element* BRACE_R {
 	pin = 2
-    mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
+//    mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
 }
 private world-element ::= SEMICOLON
-	| include
+	| dict-object
 	| import
 	| export
 	| use
@@ -109,9 +109,9 @@ private world-element ::= SEMICOLON
 	| resource
 	| COMMENT_LINE
 // include wasi:keyvalue/imports@0.2.0-draft;
-include ::= KW_INCLUDE include-name {
+dict-object ::= KW_INCLUDE include-name {
 	pin = 1
-    mixin = "com.github.bytecodealliance.language.mixin.MixinInclude"
+//    mixin = "com.github.bytecodealliance.language.mixin.MixinInclude"
 }
 include-name ::=
     identifier (COLON identifier) (SLASH interface-name) package-version?
@@ -142,9 +142,9 @@ use-alias ::= identifier (KW_AS alias-name)? {
 }
 
 // interface name { }
-define-interface ::= KW_INTERFACE interface-name interface-body {
+list-object ::= KW_INTERFACE interface-name interface-body {
 	pin = 1
-    mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
+//    mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
 }
 // exports: interface
 inline-interface ::= interface-name COLON KW_INTERFACE interface-body {
@@ -164,13 +164,13 @@ private interface-element ::= SEMICOLON
 	| function
 // get-insecure-random-bytes: func(len: u64) -> list<u8>;
 method ::= identifier COLON function-signature {
-	mixin = "com.github.bytecodealliance.language.mixin.MixinMethod"
+//	mixin = "com.github.bytecodealliance.language.mixin.MixinMethod"
 }
 constructor ::= KW_CONSTRUCTOR tuple (TO type-hint)? {
 	pin = 1
 }
 function ::= identifier COLON function-signature {
-	mixin = "com.github.bytecodealliance.language.mixin.MixinFunction"
+//	mixin = "com.github.bytecodealliance.language.mixin.MixinFunction"
 }
 function-signature ::= modifier? KW_FUNCTION tuple (TO type-hint)? {
 	pin = 2
@@ -190,7 +190,7 @@ generic   ::= ANGLE_L (type-hint (COMMA type-hint)* COMMA?)? ANGLE_R;
 // resource type-name { method: func() };
 resource  ::= KW_RESOURCE identifier (BRACE_L resource-element* BRACE_R)? {
 	pin = 1
-    mixin = "com.github.bytecodealliance.language.mixin.MixinResource"
+//    mixin = "com.github.bytecodealliance.language.mixin.MixinResource"
 }
 private resource-element ::=
     method
@@ -199,20 +199,20 @@ private resource-element ::=
 // record type-name { field: type-hint, key: value };
 record   ::= KW_RECORD identifier BRACE_L record-element* BRACE_R {
 	pin = 1
-    mixin = "com.github.bytecodealliance.language.mixin.MixinRecord"
+//    mixin = "com.github.bytecodealliance.language.mixin.MixinRecord"
 }
 private record-element ::=
     record-field
   | COMMA
 
 record-field    ::= identifier COLON type-hint {
-    mixin = "com.github.bytecodealliance.language.mixin.MixinField"
+//    mixin = "com.github.bytecodealliance.language.mixin.MixinField"
 }
 
 
 flags       ::= KW_FLAGS identifier BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R {
 	pin = 1
-    mixin = "com.github.bytecodealliance.language.mixin.MixinFlags"
+//    mixin = "com.github.bytecodealliance.language.mixin.MixinFlags"
 }
 enum       ::= KW_ENUM identifier BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R {
 	pin = 1
@@ -221,10 +221,10 @@ enum       ::= KW_ENUM identifier BRACE_L (semantic-number (COMMA semantic-numbe
 
 variant          ::= KW_VARIANT identifier BRACE_L (variant-item (COMMA variant-item)* COMMA?)? BRACE_R {
 	pin = 1
-    mixin = "com.github.bytecodealliance.language.mixin.MixinVariant"
+//    mixin = "com.github.bytecodealliance.language.mixin.MixinVariant"
 }
 variant-item 	 ::= identifier (PARENTHESIS_L type-hint PARENTHESIS_R)? {
-    mixin = "com.github.bytecodealliance.language.mixin.MixinVariantItem"
+//    mixin = "com.github.bytecodealliance.language.mixin.MixinVariantItem"
 }
 
 

@@ -37,4 +37,3 @@ class WitFileTypeX private constructor() : LanguageFileType(WitxLanguage) {
         val INSTANCE = WitFileTypeX()
     }
 }
-

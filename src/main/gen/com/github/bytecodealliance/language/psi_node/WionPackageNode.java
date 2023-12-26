@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.bytecodealliance.language.psi.WionTypes.*;
-import com.github.bytecodealliance.language.mixin.MixinPackage;
+import com.github.bytecodealliance.language.psi.WionElement;
 import com.github.bytecodealliance.language.psi.*;
 
-public class WionPackageNode extends MixinPackage implements WionPackage {
+public class WionPackageNode extends WionElement implements WionPackage {
 
   public WionPackageNode(@NotNull ASTNode node) {
     super(node);

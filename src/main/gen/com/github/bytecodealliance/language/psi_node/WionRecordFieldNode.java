@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.bytecodealliance.language.psi.WionTypes.*;
-import com.github.bytecodealliance.language.mixin.MixinField;
+import com.github.bytecodealliance.language.psi.WionElement;
 import com.github.bytecodealliance.language.psi.*;
 
-public class WionRecordFieldNode extends MixinField implements WionRecordField {
+public class WionRecordFieldNode extends WionElement implements WionRecordField {
 
   public WionRecordFieldNode(@NotNull ASTNode node) {
     super(node);

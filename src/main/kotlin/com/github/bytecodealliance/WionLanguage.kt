@@ -2,9 +2,9 @@ package com.github.bytecodealliance
 
 import com.intellij.lang.Language
 
-object WitxLanguage : Language("witx") {
-    private fun readResolve(): Any = WitxLanguage
+object WionLanguage : Language("wion") {
+    private fun readResolve(): Any = WionLanguage
     override fun getDisplayName(): String {
-        return "WIT X"
+        return "wion"
     }
 }
