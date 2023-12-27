@@ -4,7 +4,6 @@ import com.github.bytecodealliance.language.file.WitFile
 import com.github.bytecodealliance.language.psi.WitDefineInterface
 import com.github.bytecodealliance.language.psi.WitEnum
 import com.github.bytecodealliance.language.psi.WitFlags
-import com.github.bytecodealliance.language.psi.WitInterface
 import com.github.bytecodealliance.language.psi.WitRecord
 import com.github.bytecodealliance.language.psi.WitResource
 import com.github.bytecodealliance.language.psi.WitVariant
@@ -67,7 +66,7 @@ class WitStructureViewElement(private val node: NavigatablePsiElement) :
         is WitWorld -> getChildOfType(
             WitExportNode::class.java,
         )
-        is WitInterface -> getChildOfType(
+        is WitDefineInterface -> getChildOfType(
             WitResourceNode::class.java,
             WitRecordNode::class.java,
             WitVariantNode::class.java,

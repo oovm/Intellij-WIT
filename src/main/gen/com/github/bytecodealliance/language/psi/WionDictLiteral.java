@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface WionDictItem extends PsiElement {
+public interface WionDictLiteral extends PsiElement {
 
   @NotNull
-  WionDictKey getDictKey();
+  List<WionDictItem> getDictItemList();
 
-  @NotNull
-  WionWionValue getWionValue();
+  @Nullable
+  WionIdentifier getIdentifier();
 
 }

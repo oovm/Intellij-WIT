@@ -36,7 +36,7 @@ class WitFormatBuilder : FormattingModelBuilder {
                 is WitFlags -> parent.indentInRange(child, 1, 1)
                 is WitEnum -> parent.indentInRange(child, 1, 1)
                 is WitVariant -> parent.indentInRange(child, 1, 1)
-                is WitFunctionParameters -> parent.indentInRange(child, 1, 1)
+                is WitFunctionSignature -> parent.indentInRange(child, 1, 1)
                 is WitTuple -> parent.indentInRange(child, 1, 1)
                 is WitGeneric -> parent.indentInRange(child, 1, 1)
 

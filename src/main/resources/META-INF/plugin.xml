@@ -19,17 +19,16 @@
 				name="wion"
 				language="wion"
 				extensions="wion;"
-				implementationClass="com.github.bytecodealliance.language.file.WitFileTypeX"
+				implementationClass="com.github.bytecodealliance.language.file.WionFileType"
 				fieldName="INSTANCE"
 		/>
 		<fileType
 				name="witx"
 				language="witx"
 				extensions="witx;"
-				implementationClass="com.github.bytecodealliance.language.file.WionFileType"
+				implementationClass="com.github.bytecodealliance.language.file.WitFileTypeX"
 				fieldName="INSTANCE"
 		/>
-
 		<lang.parserDefinition
 				language="wit"
 				implementationClass="com.github.bytecodealliance.language.psi.WitParserDefinition"

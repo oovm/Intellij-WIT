@@ -7,15 +7,23 @@ import com.intellij.psi.PsiElement;
 
 public class WionVisitor extends PsiElementVisitor {
 
-  public void visitAliasName(@NotNull WionAliasName o) {
-    visitPsiElement(o);
-  }
-
   public void visitDictItem(@NotNull WionDictItem o) {
     visitPsiElement(o);
   }
 
-  public void visitDictObject(@NotNull WionDictObject o) {
+  public void visitDictKey(@NotNull WionDictKey o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDictLiteral(@NotNull WionDictLiteral o) {
+    visitPsiElement(o);
+  }
+
+  public void visitFlagItem(@NotNull WionFlagItem o) {
+    visitPsiElement(o);
+  }
+
+  public void visitFlagLiteral(@NotNull WionFlagLiteral o) {
     visitPsiElement(o);
   }
 
@@ -27,15 +35,27 @@ public class WionVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitListObject(@NotNull WionListObject o) {
+  public void visitListLiteral(@NotNull WionListLiteral o) {
     visitPsiElement(o);
   }
 
-  public void visitVariantItem(@NotNull WionVariantItem o) {
+  public void visitOptionLiteral(@NotNull WionOptionLiteral o) {
     visitPsiElement(o);
   }
 
-  public void visitVariantObject(@NotNull WionVariantObject o) {
+  public void visitResultLiteral(@NotNull WionResultLiteral o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTextLiteral(@NotNull WionTextLiteral o) {
+    visitPsiElement(o);
+  }
+
+  public void visitVariantLiteral(@NotNull WionVariantLiteral o) {
+    visitPsiElement(o);
+  }
+
+  public void visitWionValue(@NotNull WionWionValue o) {
     visitPsiElement(o);
   }
 

@@ -2,15 +2,6 @@ package com.github.bytecodealliance.ide.formatter
 
 import com.github.bytecodealliance.language.ast.computeSpacing
 import com.github.bytecodealliance.language.ast.isWhitespaceOrEmpty
-import com.github.bytecodealliance.language.psi.WitEnum
-import com.github.bytecodealliance.language.psi.WitFlags
-import com.github.bytecodealliance.language.psi.WitFunctionParameters
-import com.github.bytecodealliance.language.psi.WitInterface
-import com.github.bytecodealliance.language.psi.WitRecord
-import com.github.bytecodealliance.language.psi.WitResource
-import com.github.bytecodealliance.language.psi.WitUseItems
-import com.github.bytecodealliance.language.psi.WitVariant
-import com.github.bytecodealliance.language.psi.WitWorld
 import com.intellij.formatting.*
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.TextRange

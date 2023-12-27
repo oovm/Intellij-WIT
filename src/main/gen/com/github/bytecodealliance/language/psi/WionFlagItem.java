@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface WionDictItem extends PsiElement {
+public interface WionFlagItem extends PsiElement {
 
   @NotNull
-  WionDictKey getDictKey();
-
-  @NotNull
-  WionWionValue getWionValue();
+  WionIdentifier getIdentifier();
 
 }

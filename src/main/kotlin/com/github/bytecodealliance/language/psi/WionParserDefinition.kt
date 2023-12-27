@@ -7,6 +7,7 @@ import com.github.bytecodealliance.language.file.WionFile
 import com.github.bytecodealliance.language.file.WitFileX
 import com.github.bytecodealliance.language.parser.WionParser
 import com.github.bytecodealliance.language.parser.WitxParser
+import com.intellij.json.JsonTokenSets
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.lang.PsiParser
@@ -25,12 +26,13 @@ class WionParserDefinition : ParserDefinition {
     override fun createLexer(project: Project) = FlexAdapter(_WionLexer(null))
     override fun createParser(project: Project) = WionParser()
     override fun getFileNodeType() = IFileElementType(WionLanguage)
-    override fun getCommentTokens() =
-        TokenSet.create(WionTypes.COMMENT_LINE, WionTypes.COMMENT_BLOCK)
+    override fun getCommentTokens(): TokenSet {
+        return JsonTokenSets.JSON_COMMENTARIES
+    }
 
     override fun getStringLiteralElements(): TokenSet = TokenSet.create()
     override fun getWhitespaceTokens(): TokenSet = TokenSet.create(TokenType.WHITE_SPACE)
-    override fun createElement(node: ASTNode): PsiElement = WitxTypes.Factory.createElement(node)
+    override fun createElement(node: ASTNode): PsiElement = WionTypes.Factory.createElement(node)
     override fun createFile(viewProvider: FileViewProvider): PsiFile = WionFile(viewProvider)
     override fun spaceExistenceTypeBetweenTokens(left: ASTNode, right: ASTNode): ParserDefinition.SpaceRequirements {
         return ParserDefinition.SpaceRequirements.MAY

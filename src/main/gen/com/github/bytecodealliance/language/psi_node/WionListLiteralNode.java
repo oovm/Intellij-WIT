@@ -11,14 +11,14 @@ import static com.github.bytecodealliance.language.psi.WionTypes.*;
 import com.github.bytecodealliance.language.psi.WionElement;
 import com.github.bytecodealliance.language.psi.*;
 
-public class WionDictItemNode extends WionElement implements WionDictItem {
+public class WionListLiteralNode extends WionElement implements WionListLiteral {
 
-  public WionDictItemNode(@NotNull ASTNode node) {
+  public WionListLiteralNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull WionVisitor visitor) {
-    visitor.visitDictItem(this);
+    visitor.visitListLiteral(this);
   }
 
   @Override
@@ -29,14 +29,8 @@ public class WionDictItemNode extends WionElement implements WionDictItem {
 
   @Override
   @NotNull
-  public WionDictKey getDictKey() {
-    return findNotNullChildByClass(WionDictKey.class);
-  }
-
-  @Override
-  @NotNull
-  public WionWionValue getWionValue() {
-    return findNotNullChildByClass(WionWionValue.class);
+  public List<WionListItem> getListItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, WionListItem.class);
   }
 
 }

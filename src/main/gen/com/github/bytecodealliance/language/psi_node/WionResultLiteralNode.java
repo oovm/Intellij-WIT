@@ -11,14 +11,14 @@ import static com.github.bytecodealliance.language.psi.WionTypes.*;
 import com.github.bytecodealliance.language.psi.WionElement;
 import com.github.bytecodealliance.language.psi.*;
 
-public class WionDictItemNode extends WionElement implements WionDictItem {
+public class WionResultLiteralNode extends WionElement implements WionResultLiteral {
 
-  public WionDictItemNode(@NotNull ASTNode node) {
+  public WionResultLiteralNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull WionVisitor visitor) {
-    visitor.visitDictItem(this);
+    visitor.visitResultLiteral(this);
   }
 
   @Override
@@ -28,15 +28,9 @@ public class WionDictItemNode extends WionElement implements WionDictItem {
   }
 
   @Override
-  @NotNull
-  public WionDictKey getDictKey() {
-    return findNotNullChildByClass(WionDictKey.class);
-  }
-
-  @Override
-  @NotNull
+  @Nullable
   public WionWionValue getWionValue() {
-    return findNotNullChildByClass(WionWionValue.class);
+    return findChildByClass(WionWionValue.class);
   }
 
 }

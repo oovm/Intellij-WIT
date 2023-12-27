@@ -1,8 +1,10 @@
 package com.github.bytecodealliance.language;
 
+
+import static com.github.bytecodealliance.language.psi.WionTypes.*;
+import static com.intellij.json.JsonElementTypes.LINE_COMMENT;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
-import static com.github.bytecodealliance.language.psi.WionTypes.*;
 
 %%
 
@@ -25,40 +27,29 @@ WHITE_SPACE      = [\s\t]
 COMMENT_LINE     = [/]{2}[^\r\n]*
 COMMENT_BLOCK    = [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 //SYMBOL=[\p{XID_Start}_][\p{XID_Continue}_]*
-VERSION = ([0-9]+)(\.[0-9]+)(\.[0-9]+)(-[a-zA-Z0-9\-]+)?
 ESCAPED = %[a-zA-Z0-9\-]+
-SYMBOL = _|{WORD}([-]{WORD})*
+// namespace:package/module_function@2024.2.4-semver
+SYMBOL = [@/.\-\p{XID_Continue}]+
 WORD = [a-zA-Z][a-zA-Z0-9]*
 //STRING=\"([^\"\\]|\\.)*\"
 INTEGER=(0|[1-9][0-9_]*)
 DECIMAL=([0-9]+\.[0-9]*([Ee][0-9]+)?)|(\.[0-9]+([Ee][0-9]+)?)
 
-CRLF      = \r\n | \n | \r
-HEX = [0-9a-fA-F]
+STRING_S1 = '[^']*'
+STRING_S2 = \"(\\.|[^\\])*\"
 
-KW_PACKAGE     = "package"
-KW_WORLD       = "world"
-KW_INTERFACE   = "interface"
-KW_INCLUDE     = "include"
-KW_EXPORT      = "export"
-KW_IMPORT      = "import"
-KW_USE         = "use"
-KW_AS          = "as"
-KW_TYPE        = "type"
-KW_RESOURCE    = "resource"
-KW_RECORD      = "record"
-KW_ENUM        = "enum"
-KW_FLAGS       = "flags"
-KW_VARIANT     = "variant"
-KW_FUNCTION    = "func"
-KW_CONSTRUCTOR = "constructor"
-
+KW_SOME  = "some"
+KW_NONE  = "none"
+KW_FINE  = "fine"
+KW_FAIL  = "fail"
+KW_TRUE  = "true"
+KW_FALSE = "false"
 %%
 
 <YYINITIAL> {
     {WHITE_SPACE}+     { return WHITE_SPACE; }
-	{COMMENT_LINE}     { return COMMENT_LINE; }
-	{COMMENT_BLOCK}    { return COMMENT_BLOCK; }
+	{COMMENT_LINE}     { return LINE_COMMENT; }
+//	{COMMENT_BLOCK}    { return COMMENT_BLOCK; }
 }
 
 <YYINITIAL> {
@@ -68,43 +59,23 @@ KW_CONSTRUCTOR = "constructor"
     "]" { return BRACKET_R; }
 	"{" { return BRACE_L; }
 	"}" { return BRACE_R; }
-	"<" { return ANGLE_L; }
-	">" { return ANGLE_R; }
-    "->" { return TO; }
-	"^" { return ACCENT; }
-	":" { return COLON; }
-	";" { return SEMICOLON; }
-	"$" { return DOLLAR; }
-	"@" { return AT; }
-	"/" { return SLASH; }
-	"." { return DOT; }
-	"," { return COMMA; }
-	"-" { return HYPHEN; }
+//	"<" { return ANGLE_L; }
+//	">" { return ANGLE_R; }
 	"=" { return EQ; }
 }
 <YYINITIAL> {
-	{KW_PACKAGE}   { return KW_PACKAGE; }
-	{KW_WORLD}     { return KW_WORLD; }
-	{KW_INTERFACE} { return KW_INTERFACE; }
+	{KW_SOME} { return KW_SOME; }
+	{KW_NONE} { return KW_NONE; }
 
-	{KW_INCLUDE} { return KW_INCLUDE; }
-	{KW_USE}     { return KW_USE; }
-	{KW_AS}      { return KW_AS; }
-	{KW_IMPORT}  { return KW_IMPORT; }
-	{KW_EXPORT}  { return KW_EXPORT; }
+	{KW_FINE} { return KW_FINE; }
+	{KW_FAIL} { return KW_FAIL; }
 
-	{KW_TYPE}     { return KW_TYPE; }
-	{KW_RESOURCE} { return KW_RESOURCE; }
-	{KW_RECORD}   { return KW_RECORD; }
-	{KW_ENUM}     { return KW_ENUM; }
-	{KW_FLAGS}    { return KW_FLAGS; }
-	{KW_VARIANT}  { return KW_VARIANT; }
+	{KW_TRUE}  { return KW_TRUE; }
+	{KW_FALSE} { return KW_FALSE; }
 
-	{KW_FUNCTION}    { return KW_FUNCTION; }
-    {KW_CONSTRUCTOR} { return KW_CONSTRUCTOR; }
+	{STRING_S1} { return STRING_S1; }
+	{STRING_S2} { return STRING_S2; }
 
-	{VERSION} { return VERSION; }
-    {ESCAPED} { return ESCAPED; }
 	{SYMBOL}  { return SYMBOL; }
 }
 // =====================================================================================================================
