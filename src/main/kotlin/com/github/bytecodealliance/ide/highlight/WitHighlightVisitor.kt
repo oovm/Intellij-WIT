@@ -145,3 +145,4 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
 
     override fun visit(element: PsiElement) = element.accept(this)
 }
+

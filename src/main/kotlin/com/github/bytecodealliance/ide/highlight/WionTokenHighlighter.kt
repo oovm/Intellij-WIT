@@ -15,20 +15,22 @@ class WionTokenHighlighter : SyntaxHighlighter {
     }
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
-        return when (val key = getTokenColor(tokenType)?.textAttributesKey) {
+        return when (val key = wionColor(tokenType)?.textAttributesKey) {
             null -> emptyArray()
             else -> arrayOf(key)
         }
     }
 
-    private fun getTokenColor(tokenType: IElementType): WionColor? {
+    private fun wionColor(tokenType: IElementType): WionColor? {
         return when (tokenType) {
             KW_TRUE, KW_FALSE -> WionColor.BOOLEAN
-            KW_SOME -> WionColor.KEYWORD
-            KW_NONE -> WionColor.NONE
-            KW_FINE, KW_FAIL -> WionColor.KEYWORD
+            KW_SOME -> WionColor.BUILTIN
+            KW_NONE -> WionColor.BUILTIN
+            KW_FINE, KW_FAIL -> WionColor.BUILTIN
             STRING_S1, STRING_S2 -> WionColor.STRING
             BIN, OCT, HEX, DEC -> WionColor.NUMBER
+
+            ADD, SUB -> WionColor.BUILTIN
             // 注释
             JsonElementTypes.LINE_COMMENT -> WionColor.LINE_COMMENT
             JsonElementTypes.BLOCK_COMMENT -> WionColor.BLOCK_COMMENT

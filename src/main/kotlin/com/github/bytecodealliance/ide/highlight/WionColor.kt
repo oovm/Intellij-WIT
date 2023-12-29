@@ -1,6 +1,7 @@
 package com.github.bytecodealliance.ide.highlight
 
 import com.github.bytecodealliance.MessageBundle
+import com.intellij.json.highlighting.JsonSyntaxHighlighterFactory
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.HighlighterColors
@@ -29,25 +30,21 @@ enum class WionColor(humanName: Supplier<@NlsContexts.AttributeDescriptor String
         OptionsBundle.messagePointer("options.language.defaults.identifier"),
         DefaultLanguageHighlighterColors.IDENTIFIER
     ),
-    SYM_WORLD(MessageBundle.messagePointer("color.token.symbol.world"), DefaultLanguageHighlighterColors.INTERFACE_NAME),
-    SYM_INTERFACE(
-        MessageBundle.messagePointer("color.token.symbol.interface"),
-        DefaultLanguageHighlighterColors.INTERFACE_NAME
+    KEY(MessageBundle.messagePointer("color.token.symbol.key"), JsonSyntaxHighlighterFactory.JSON_PROPERTY_KEY),
+    RECORD(
+        MessageBundle.messagePointer("color.token.symbol.record"),
+        DefaultLanguageHighlighterColors.CLASS_NAME
     ),
-    SYM_TYPE(MessageBundle.messagePointer("color.token.symbol.type"), DefaultLanguageHighlighterColors.CLASS_NAME),
-    SYM_FIELD(MessageBundle.messagePointer("color.token.symbol.field"), DefaultLanguageHighlighterColors.INSTANCE_FIELD),
-
-    SYM_VARIANT(
+    VARIANT(
         MessageBundle.messagePointer("color.token.symbol.variant"),
-        DefaultLanguageHighlighterColors.STATIC_FIELD
+        DefaultLanguageHighlighterColors.STATIC_METHOD
     ),
-    //    SYM_ATTRIBUTE(WitBundle.messagePointer("color.token.symbol.attribute"), Default.STATIC_METHOD),
-//    SYM_VARIABLE(WitBundle.messagePointer("color.token.symbol.variable"), Default.REASSIGNED_PARAMETER),
-    SYM_FUNCTION(
-        MessageBundle.messagePointer("color.token.symbol.function"),
-        DefaultLanguageHighlighterColors.FUNCTION_DECLARATION
+    // 废弃
+    FLAGS(
+        OptionsBundle.messagePointer("options.language.defaults.metadata"),
+        DefaultLanguageHighlighterColors.CONSTANT
     ),
-    SYM_BUILTIN(
+    BUILTIN(
         MessageBundle.messagePointer("color.token.symbol.builtin"),
         DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL
     ),
@@ -88,15 +85,7 @@ enum class WionColor(humanName: Supplier<@NlsContexts.AttributeDescriptor String
     BAD_CHARACTER(
         OptionsBundle.messagePointer("options.java.attribute.descriptor.bad.character"),
         HighlighterColors.BAD_CHARACTER
-    ),
-
-    // 废弃
-    EXTENSION(
-        OptionsBundle.messagePointer("options.language.defaults.metadata"),
-        DefaultLanguageHighlighterColors.METADATA
-    ),
-    ;
-
+    );
     val textAttributesKey: TextAttributesKey = TextAttributesKey.createTextAttributesKey("WION.$name", default)
     val attributesDescriptor: AttributesDescriptor = AttributesDescriptor(humanName, textAttributesKey)
     val testSeverity: HighlightSeverity = HighlightSeverity(name, HighlightSeverity.INFORMATION.myVal)

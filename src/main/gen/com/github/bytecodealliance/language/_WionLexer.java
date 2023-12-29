@@ -363,7 +363,7 @@ public class _WionLexer implements com.intellij.lexer.FlexLexer {
     "\0\0\0\53\0\126\0\201\0\254\0\53\0\53\0\327"+
     "\0\53\0\u0102\0\u012d\0\u0158\0\u0183\0\u01ae\0\53\0\53"+
     "\0\53\0\u01d9\0\u0204\0\u022f\0\u025a\0\53\0\53\0\201"+
-    "\0\201\0\u0285\0\254\0\53\0\u02b0\0\u02db\0\u0306\0\u0331"+
+    "\0\53\0\u0285\0\254\0\53\0\u02b0\0\u02db\0\u0306\0\u0331"+
     "\0\u035c\0\u0387\0\u03b2\0\u03dd\0\u0408\0\u0433\0\u045e\0\u0489"+
     "\0\u04b4\0\u04df\0\u050a\0\u0535\0\u0560\0\u058b\0\u05b6\0\u05e1"+
     "\0\u060c\0\u0637\0\u0662\0\u068d\0\u06b8\0\u06e3\0\u070e\0\u0739"+
@@ -485,7 +485,7 @@ public class _WionLexer implements com.intellij.lexer.FlexLexer {
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\1\0\1\11\3\1\2\11\1\1\1\11\5\1\3\11"+
-    "\4\1\2\11\1\0\1\1\2\0\1\11\4\1\6\0"+
+    "\4\1\2\11\1\0\1\11\2\0\1\11\4\1\6\0"+
     "\11\1\1\0\22\1";
 
   private static int [] zzUnpackAttribute() {

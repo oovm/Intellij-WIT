@@ -28,10 +28,10 @@ COMMENT_BLOCK    = [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 //SYMBOL=[\p{XID_Start}_][\p{XID_Continue}_]*
 ESCAPED = %[a-zA-Z0-9\-]+
 // namespace:package/module_function@2024.2.4-semver
-SYMBOL = [@/:.\-\p{XID_Start}][@/:.\-\p{XID_Continue}]*
+SYMBOL = [@#/:.\-\p{XID_Start}][@#/:.\-\p{XID_Continue}]*
 
 STRING_S1 = '[^']*'
-STRING_S2 = \"(\\.|[^\\])*\"
+STRING_S2 = \"(\\.|[^\\\"])*\"
 
 SIGN = [+-]
 INTEGER = 0|[1-9](_?[0-9])*

@@ -63,6 +63,8 @@
 		<additionalTextAttributes scheme="Darcula" file="colors/FluentDarcula.xml"/>
 		<colorSettingsPage implementation="com.github.bytecodealliance.ide.highlight.WitHighlightSetting"/>
 		<highlightVisitor implementation="com.github.bytecodealliance.ide.highlight.WitHighlightVisitor"/>
+		<highlightVisitor implementation="com.github.bytecodealliance.ide.highlight.WionNodeHighlighter"/>
+
 
 		<!-- Formatter -->
 		<lang.formatter
