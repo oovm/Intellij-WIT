@@ -7,10 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface WionDictItem extends PsiElement {
 
-  @NotNull
+  @Nullable
   WionDictKey getDictKey();
 
-  @NotNull
+  @Nullable
   WionWionValue getWionValue();
 
 }

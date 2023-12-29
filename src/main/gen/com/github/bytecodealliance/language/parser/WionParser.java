@@ -36,135 +36,205 @@ public class WionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SYMBOL | ESCAPED
-  public static boolean alias_name(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "alias_name")) return false;
-    if (!nextTokenIs(b, "<alias name>", ESCAPED, SYMBOL)) return false;
+  // dict-key EQUAL wion-value | COMMA
+  public static boolean dict_item(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_item")) return false;
+    if (!nextTokenIs(b, "<dict item>", COMMA, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, ALIAS_NAME, "<alias name>");
-    r = consumeToken(b, SYMBOL);
-    if (!r) r = consumeToken(b, ESCAPED);
+    Marker m = enter_section_(b, l, _NONE_, DICT_ITEM, "<dict item>");
+    r = dict_item_0(b, l + 1);
+    if (!r) r = consumeToken(b, COMMA);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // dict-key EQUAL wion-value
+  private static boolean dict_item_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_item_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = dict_key(b, l + 1);
+    r = r && consumeToken(b, EQUAL);
+    r = r && wion_value(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
   // identifier
-  public static boolean dict_item(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "dict_item")) return false;
-    if (!nextTokenIs(b, "<dict item>", ESCAPED, SYMBOL)) return false;
+  public static boolean dict_key(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_key")) return false;
+    if (!nextTokenIs(b, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, DICT_ITEM, "<dict item>");
+    Marker m = enter_section_(b);
     r = identifier(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, DICT_KEY, r);
     return r;
   }
 
   /* ********************************************************** */
-  // identifier? BRACE_L (dict-item (COMMA dict-item)* COMMA?)? BRACE_R {
+  // identifier? BRACE_L dict-item* BRACE_R {
   // //    mixin = "com.github.bytecodealliance.language.mixin.MixinInclude"
   // }
-  public static boolean dict_object(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "dict_object")) return false;
+  public static boolean dict_literal(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_literal")) return false;
+    if (!nextTokenIs(b, "<dict literal>", BRACE_L, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, DICT_OBJECT, "<dict object>");
-    r = dict_object_0(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, DICT_LITERAL, "<dict literal>");
+    r = dict_literal_0(b, l + 1);
     r = r && consumeToken(b, BRACE_L);
-    r = r && dict_object_2(b, l + 1);
+    r = r && dict_literal_2(b, l + 1);
     r = r && consumeToken(b, BRACE_R);
-    r = r && dict_object_4(b, l + 1);
+    r = r && dict_literal_4(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // identifier?
-  private static boolean dict_object_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "dict_object_0")) return false;
+  private static boolean dict_literal_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_literal_0")) return false;
     identifier(b, l + 1);
     return true;
   }
 
-  // (dict-item (COMMA dict-item)* COMMA?)?
-  private static boolean dict_object_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "dict_object_2")) return false;
-    dict_object_2_0(b, l + 1);
-    return true;
-  }
-
-  // dict-item (COMMA dict-item)* COMMA?
-  private static boolean dict_object_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "dict_object_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = dict_item(b, l + 1);
-    r = r && dict_object_2_0_1(b, l + 1);
-    r = r && dict_object_2_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (COMMA dict-item)*
-  private static boolean dict_object_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "dict_object_2_0_1")) return false;
+  // dict-item*
+  private static boolean dict_literal_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_literal_2")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!dict_object_2_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "dict_object_2_0_1", c)) break;
+      if (!dict_item(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "dict_literal_2", c)) break;
     }
-    return true;
-  }
-
-  // COMMA dict-item
-  private static boolean dict_object_2_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "dict_object_2_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && dict_item(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // COMMA?
-  private static boolean dict_object_2_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "dict_object_2_0_2")) return false;
-    consumeToken(b, COMMA);
     return true;
   }
 
   // {
   // //    mixin = "com.github.bytecodealliance.language.mixin.MixinInclude"
   // }
-  private static boolean dict_object_4(PsiBuilder b, int l) {
+  private static boolean dict_literal_4(PsiBuilder b, int l) {
     return true;
   }
 
   /* ********************************************************** */
-  // SYMBOL | ESCAPED
-  public static boolean identifier(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "identifier")) return false;
-    if (!nextTokenIs(b, "<identifier>", ESCAPED, SYMBOL)) return false;
+  // identifier | COMMA {
+  // //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
+  // }
+  public static boolean flag_item(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "flag_item")) return false;
+    if (!nextTokenIs(b, "<flag item>", COMMA, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, IDENTIFIER, "<identifier>");
-    r = consumeToken(b, SYMBOL);
-    if (!r) r = consumeToken(b, ESCAPED);
+    Marker m = enter_section_(b, l, _NONE_, FLAG_ITEM, "<flag item>");
+    r = identifier(b, l + 1);
+    if (!r) r = flag_item_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // COMMA {
+  // //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
+  // }
+  private static boolean flag_item_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "flag_item_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && flag_item_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // {
+  // //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
+  // }
+  private static boolean flag_item_1_1(PsiBuilder b, int l) {
+    return true;
+  }
+
+  /* ********************************************************** */
+  // flag-sign BRACKET_L flag-item* BRACKET_R {
+  // }
+  public static boolean flag_literal(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "flag_literal")) return false;
+    if (!nextTokenIs(b, "<flag literal>", ADD, SUB)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, FLAG_LITERAL, "<flag literal>");
+    r = flag_sign(b, l + 1);
+    r = r && consumeToken(b, BRACKET_L);
+    r = r && flag_literal_2(b, l + 1);
+    r = r && consumeToken(b, BRACKET_R);
+    r = r && flag_literal_4(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // flag-item*
+  private static boolean flag_literal_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "flag_literal_2")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!flag_item(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "flag_literal_2", c)) break;
+    }
+    return true;
+  }
+
+  // {
+  // }
+  private static boolean flag_literal_4(PsiBuilder b, int l) {
+    return true;
+  }
+
+  /* ********************************************************** */
+  // ADD | SUB
+  public static boolean flag_sign(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "flag_sign")) return false;
+    if (!nextTokenIs(b, "<flag sign>", ADD, SUB)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, FLAG_SIGN, "<flag sign>");
+    r = consumeToken(b, ADD);
+    if (!r) r = consumeToken(b, SUB);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // identifier {
+  // SYMBOL
+  public static boolean identifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "identifier")) return false;
+    if (!nextTokenIs(b, SYMBOL)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, SYMBOL);
+    exit_section_(b, m, IDENTIFIER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // wion-value | COMMA {
   // //	extends = interface
   // //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
   // }
   public static boolean list_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "list_item")) return false;
-    if (!nextTokenIs(b, "<list item>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LIST_ITEM, "<list item>");
-    r = identifier(b, l + 1);
-    r = r && list_item_1(b, l + 1);
+    r = wion_value(b, l + 1);
+    if (!r) r = list_item_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // COMMA {
+  // //	extends = interface
+  // //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
+  // }
+  private static boolean list_item_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "list_item_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && list_item_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -172,135 +242,220 @@ public class WionParser implements PsiParser, LightPsiParser {
   // //	extends = interface
   // //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
   // }
-  private static boolean list_item_1(PsiBuilder b, int l) {
+  private static boolean list_item_1_1(PsiBuilder b, int l) {
     return true;
   }
 
   /* ********************************************************** */
-  // BRACKET_L (list-item (COMMA list-item)* COMMA?)? BRACKET_R {
+  // BRACKET_L list-item* BRACKET_R {
   // //    mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
   // }
-  public static boolean list_object(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "list_object")) return false;
+  public static boolean list_literal(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "list_literal")) return false;
     if (!nextTokenIs(b, BRACKET_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, BRACKET_L);
-    r = r && list_object_1(b, l + 1);
+    r = r && list_literal_1(b, l + 1);
     r = r && consumeToken(b, BRACKET_R);
-    r = r && list_object_3(b, l + 1);
-    exit_section_(b, m, LIST_OBJECT, r);
+    r = r && list_literal_3(b, l + 1);
+    exit_section_(b, m, LIST_LITERAL, r);
     return r;
   }
 
-  // (list-item (COMMA list-item)* COMMA?)?
-  private static boolean list_object_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "list_object_1")) return false;
-    list_object_1_0(b, l + 1);
-    return true;
-  }
-
-  // list-item (COMMA list-item)* COMMA?
-  private static boolean list_object_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "list_object_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = list_item(b, l + 1);
-    r = r && list_object_1_0_1(b, l + 1);
-    r = r && list_object_1_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (COMMA list-item)*
-  private static boolean list_object_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "list_object_1_0_1")) return false;
+  // list-item*
+  private static boolean list_literal_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "list_literal_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!list_object_1_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "list_object_1_0_1", c)) break;
+      if (!list_item(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "list_literal_1", c)) break;
     }
-    return true;
-  }
-
-  // COMMA list-item
-  private static boolean list_object_1_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "list_object_1_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && list_item(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // COMMA?
-  private static boolean list_object_1_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "list_object_1_0_2")) return false;
-    consumeToken(b, COMMA);
     return true;
   }
 
   // {
   // //    mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
   // }
-  private static boolean list_object_3(PsiBuilder b, int l) {
+  private static boolean list_literal_3(PsiBuilder b, int l) {
     return true;
   }
 
   /* ********************************************************** */
-  // dict-object
-  public static boolean variant_item(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "variant_item")) return false;
+  // BIN | OCT | DEC | HEX
+  public static boolean number_literal(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "number_literal")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, VARIANT_ITEM, "<variant item>");
-    r = dict_object(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, NUMBER_LITERAL, "<number literal>");
+    r = consumeToken(b, BIN);
+    if (!r) r = consumeToken(b, OCT);
+    if (!r) r = consumeToken(b, DEC);
+    if (!r) r = consumeToken(b, HEX);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // identifier PARENTHESIS_L variant-item? PARENTHESIS_R {
-  // //    mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
-  // }
-  public static boolean variant_object(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "variant_object")) return false;
-    if (!nextTokenIs(b, "<variant object>", ESCAPED, SYMBOL)) return false;
+  // KW_SOME PARENTHESIS_L wion-value? PARENTHESIS_R
+  // 	| KW_NONE
+  public static boolean option_literal(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "option_literal")) return false;
+    if (!nextTokenIs(b, "<option literal>", KW_NONE, KW_SOME)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, VARIANT_OBJECT, "<variant object>");
-    r = identifier(b, l + 1);
-    r = r && consumeToken(b, PARENTHESIS_L);
-    r = r && variant_object_2(b, l + 1);
-    r = r && consumeToken(b, PARENTHESIS_R);
-    r = r && variant_object_4(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, OPTION_LITERAL, "<option literal>");
+    r = option_literal_0(b, l + 1);
+    if (!r) r = consumeToken(b, KW_NONE);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // variant-item?
-  private static boolean variant_object_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "variant_object_2")) return false;
-    variant_item(b, l + 1);
+  // KW_SOME PARENTHESIS_L wion-value? PARENTHESIS_R
+  private static boolean option_literal_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "option_literal_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, KW_SOME, PARENTHESIS_L);
+    r = r && option_literal_0_2(b, l + 1);
+    r = r && consumeToken(b, PARENTHESIS_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // wion-value?
+  private static boolean option_literal_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "option_literal_0_2")) return false;
+    wion_value(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // KW_FINE PARENTHESIS_L wion-value? PARENTHESIS_R
+  //   | KW_FAIL PARENTHESIS_L wion-value? PARENTHESIS_R
+  public static boolean result_literal(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "result_literal")) return false;
+    if (!nextTokenIs(b, "<result literal>", KW_FAIL, KW_FINE)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, RESULT_LITERAL, "<result literal>");
+    r = result_literal_0(b, l + 1);
+    if (!r) r = result_literal_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // KW_FINE PARENTHESIS_L wion-value? PARENTHESIS_R
+  private static boolean result_literal_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "result_literal_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, KW_FINE, PARENTHESIS_L);
+    r = r && result_literal_0_2(b, l + 1);
+    r = r && consumeToken(b, PARENTHESIS_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // wion-value?
+  private static boolean result_literal_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "result_literal_0_2")) return false;
+    wion_value(b, l + 1);
+    return true;
+  }
+
+  // KW_FAIL PARENTHESIS_L wion-value? PARENTHESIS_R
+  private static boolean result_literal_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "result_literal_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, KW_FAIL, PARENTHESIS_L);
+    r = r && result_literal_1_2(b, l + 1);
+    r = r && consumeToken(b, PARENTHESIS_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // wion-value?
+  private static boolean result_literal_1_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "result_literal_1_2")) return false;
+    wion_value(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // STRING_S1 | STRING_S2
+  public static boolean text_literal(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "text_literal")) return false;
+    if (!nextTokenIs(b, "<text literal>", STRING_S1, STRING_S2)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, TEXT_LITERAL, "<text literal>");
+    r = consumeToken(b, STRING_S1);
+    if (!r) r = consumeToken(b, STRING_S2);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // identifier PARENTHESIS_L wion-value? PARENTHESIS_R {
+  // //    mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
+  // }
+  public static boolean variant_literal(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "variant_literal")) return false;
+    if (!nextTokenIs(b, SYMBOL)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = identifier(b, l + 1);
+    r = r && consumeToken(b, PARENTHESIS_L);
+    r = r && variant_literal_2(b, l + 1);
+    r = r && consumeToken(b, PARENTHESIS_R);
+    r = r && variant_literal_4(b, l + 1);
+    exit_section_(b, m, VARIANT_LITERAL, r);
+    return r;
+  }
+
+  // wion-value?
+  private static boolean variant_literal_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "variant_literal_2")) return false;
+    wion_value(b, l + 1);
     return true;
   }
 
   // {
   // //    mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
   // }
-  private static boolean variant_object_4(PsiBuilder b, int l) {
+  private static boolean variant_literal_4(PsiBuilder b, int l) {
     return true;
   }
 
   /* ********************************************************** */
-  // dict-object
-  //   | list-object
-  //   | variant-object
+  // wion-value
   static boolean wion(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "wion")) return false;
+    return wion_value(b, l + 1);
+  }
+
+  /* ********************************************************** */
+  // KW_TRUE | KW_FALSE
+  // 	| text-literal
+  // 	| number-literal
+  // 	| dict-literal
+  // 	| list-literal
+  // 	| flag-literal
+  // 	| option-literal
+  // 	| result-literal
+  // 	| variant-literal
+  public static boolean wion_value(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "wion_value")) return false;
     boolean r;
-    r = dict_object(b, l + 1);
-    if (!r) r = list_object(b, l + 1);
-    if (!r) r = variant_object(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, WION_VALUE, "<wion value>");
+    r = consumeToken(b, KW_TRUE);
+    if (!r) r = consumeToken(b, KW_FALSE);
+    if (!r) r = text_literal(b, l + 1);
+    if (!r) r = number_literal(b, l + 1);
+    if (!r) r = dict_literal(b, l + 1);
+    if (!r) r = list_literal(b, l + 1);
+    if (!r) r = flag_literal(b, l + 1);
+    if (!r) r = option_literal(b, l + 1);
+    if (!r) r = result_literal(b, l + 1);
+    if (!r) r = variant_literal(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

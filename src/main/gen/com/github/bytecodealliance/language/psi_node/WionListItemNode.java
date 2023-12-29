@@ -28,9 +28,9 @@ public class WionListItemNode extends WionElement implements WionListItem {
   }
 
   @Override
-  @NotNull
-  public WionIdentifier getIdentifier() {
-    return findNotNullChildByClass(WionIdentifier.class);
+  @Nullable
+  public WionWionValue getWionValue() {
+    return findChildByClass(WionWionValue.class);
   }
 
 }

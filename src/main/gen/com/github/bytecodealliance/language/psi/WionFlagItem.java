@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface WionFlagItem extends PsiElement {
 
-  @NotNull
+  @Nullable
   WionIdentifier getIdentifier();
 
 }

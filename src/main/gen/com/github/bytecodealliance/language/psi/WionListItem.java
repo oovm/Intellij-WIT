@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface WionListItem extends PsiElement {
 
-  @NotNull
-  WionIdentifier getIdentifier();
+  @Nullable
+  WionWionValue getWionValue();
 
 }

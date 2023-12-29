@@ -41,8 +41,18 @@
 				language="witx"
 				implementationClass="com.github.bytecodealliance.language.psi.WitParserDefinitionX"
 		/>
-
-
+		<lang.syntaxHighlighter
+				language="wit"
+				implementationClass="com.github.bytecodealliance.ide.highlight.WitSyntaxHighlighter"
+		/>
+		<lang.syntaxHighlighter
+				language="witx"
+				implementationClass="com.github.bytecodealliance.ide.highlight.WitSyntaxHighlighterX"
+		/>
+		<lang.syntaxHighlighter
+				language="wion"
+				implementationClass="com.github.bytecodealliance.ide.highlight.WionTokenHighlighter"
+		/>
 
 		<!-- StructureView -->
 		<lang.psiStructureViewFactory language="wit"
@@ -53,14 +63,7 @@
 		<additionalTextAttributes scheme="Darcula" file="colors/FluentDarcula.xml"/>
 		<colorSettingsPage implementation="com.github.bytecodealliance.ide.highlight.WitHighlightSetting"/>
 		<highlightVisitor implementation="com.github.bytecodealliance.ide.highlight.WitHighlightVisitor"/>
-		<lang.syntaxHighlighter
-				language="wit"
-				implementationClass="com.github.bytecodealliance.ide.highlight.WitSyntaxHighlighter"
-		/>
-		<lang.syntaxHighlighter
-				language="witx"
-				implementationClass="com.github.bytecodealliance.ide.highlight.WitSyntaxHighlighterX"
-		/>
+
 		<!-- Formatter -->
 		<lang.formatter
 				language="wit"

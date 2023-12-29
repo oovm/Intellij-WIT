@@ -20,7 +20,6 @@
         STRING_QUOTE = "String Quote"
         STRING_CHAR = "String Character"
         STRING_ESCAPE = "String Escaped"
-        SELECTION_LINE = "SELECTION_LINE"
 
         PARENTHESIS_L = '('
         PARENTHESIS_R = ')'
@@ -28,7 +27,7 @@
         BRACKET_R = ']'
         BRACE_L = '{'
         BRACE_R = '}'
-        EQ = '='
+        EQUAL = '='
         COMMA = ','
     ]
 }
@@ -37,35 +36,38 @@
 wion ::= wion-value
 wion-value ::= KW_TRUE | KW_FALSE
 	| text-literal
+	| number-literal
 	| dict-literal
 	| list-literal
 	| flag-literal
 	| option-literal
 	| result-literal
 	| variant-literal
-
+// 'raw' or "\n"
 text-literal ::= STRING_S1 | STRING_S2;
+// 0b01, 0o123, 123, 0x123
+number-literal ::= BIN | OCT | DEC | HEX;
 // record { key = value}
-dict-literal ::= identifier? BRACE_L (dict-item (COMMA dict-item)* COMMA?)? BRACE_R {
+dict-literal ::= identifier? BRACE_L dict-item* BRACE_R {
 //    mixin = "com.github.bytecodealliance.language.mixin.MixinInclude"
 }
-dict-item  ::= dict-key EQUAL wion-value;
+dict-item  ::= dict-key EQUAL wion-value | COMMA;
 dict-key   ::= identifier;
 // [true, false, 0]
-list-literal ::= BRACKET_L (list-item (COMMA list-item)* COMMA?)? BRACKET_R {
+list-literal ::= BRACKET_L list-item* BRACKET_R {
 //    mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
 }
 // exports: interface
-list-item ::= identifier {
+list-item ::= wion-value | COMMA {
 //	extends = interface
 //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
 }
 
-flag-literal ::= BRACKET_L (flag-item (COMMA flag-item)* COMMA?)? BRACKET_R {
+flag-literal ::= flag-sign BRACKET_L flag-item* BRACKET_R {
 
 }
-flag-item ::= identifier {
-//	extends = interface
+flag-sign ::= ADD | SUB;
+flag-item ::= identifier | COMMA {
 //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
 }
 // variant()
@@ -78,4 +80,4 @@ variant-literal ::= identifier PARENTHESIS_L wion-value? PARENTHESIS_R {
 //    mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
 }
 /* Identifier */
-identifier ::= SYMBOL | KW_TRUE | KW_FALSE;
+identifier ::= SYMBOL;

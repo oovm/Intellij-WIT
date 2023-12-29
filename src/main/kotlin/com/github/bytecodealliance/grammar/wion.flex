@@ -22,21 +22,26 @@ import static com.intellij.psi.TokenType.WHITE_SPACE;
 %unicode
 
 //%state TextContextIndent
-
 WHITE_SPACE      = [\s\t]
 COMMENT_LINE     = [/]{2}[^\r\n]*
 COMMENT_BLOCK    = [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 //SYMBOL=[\p{XID_Start}_][\p{XID_Continue}_]*
 ESCAPED = %[a-zA-Z0-9\-]+
 // namespace:package/module_function@2024.2.4-semver
-SYMBOL = [@/.\-\p{XID_Continue}]+
-WORD = [a-zA-Z][a-zA-Z0-9]*
-//STRING=\"([^\"\\]|\\.)*\"
-INTEGER=(0|[1-9][0-9_]*)
-DECIMAL=([0-9]+\.[0-9]*([Ee][0-9]+)?)|(\.[0-9]+([Ee][0-9]+)?)
+SYMBOL = [@/:.\-\p{XID_Start}][@/:.\-\p{XID_Continue}]*
 
 STRING_S1 = '[^']*'
 STRING_S2 = \"(\\.|[^\\])*\"
+
+SIGN = [+-]
+INTEGER = 0|[1-9](_?[0-9])*
+DECIMAL = \.[0-9](_?[0-9])*
+EXPONENT = [eE]{SIGN}?[0-9](_?[0-9])*
+
+BIN  = 0b[01](_?[01])*
+OCT  = 0o[0-7](_?[0-7])*
+DEC  = {SIGN}?{INTEGER}{DECIMAL}?{EXPONENT}?
+HEX  = 0x[0-9a-fA-F](_?[0-9a-fA-F])*
 
 KW_SOME  = "some"
 KW_NONE  = "none"
@@ -61,7 +66,12 @@ KW_FALSE = "false"
 	"}" { return BRACE_R; }
 //	"<" { return ANGLE_L; }
 //	">" { return ANGLE_R; }
-	"=" { return EQ; }
+}
+<YYINITIAL> {
+	[+] { return ADD; }
+    [-] { return SUB; }
+	= { return EQUAL; }
+	, { return COMMA; }
 }
 <YYINITIAL> {
 	{KW_SOME} { return KW_SOME; }
@@ -73,10 +83,22 @@ KW_FALSE = "false"
 	{KW_TRUE}  { return KW_TRUE; }
 	{KW_FALSE} { return KW_FALSE; }
 
-	{STRING_S1} { return STRING_S1; }
-	{STRING_S2} { return STRING_S2; }
-
 	{SYMBOL}  { return SYMBOL; }
 }
+
+<YYINITIAL> {
+	{BIN} { return BIN; }
+	{OCT} { return OCT; }
+	{HEX} { return HEX; }
+	{DEC} { return DEC; }
+}
+
+<YYINITIAL> {
+	{STRING_S1} { return STRING_S1; }
+	{STRING_S2} { return STRING_S2; }
+}
+
+
+
 // =====================================================================================================================
 [^] { return BAD_CHARACTER; }

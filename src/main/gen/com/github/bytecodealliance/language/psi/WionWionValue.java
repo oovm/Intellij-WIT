@@ -17,6 +17,9 @@ public interface WionWionValue extends PsiElement {
   WionListLiteral getListLiteral();
 
   @Nullable
+  WionNumberLiteral getNumberLiteral();
+
+  @Nullable
   WionOptionLiteral getOptionLiteral();
 
   @Nullable

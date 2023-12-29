@@ -33,4 +33,10 @@ public class WionFlagLiteralNode extends WionElement implements WionFlagLiteral 
     return PsiTreeUtil.getChildrenOfTypeAsList(this, WionFlagItem.class);
   }
 
+  @Override
+  @NotNull
+  public WionFlagSign getFlagSign() {
+    return findNotNullChildByClass(WionFlagSign.class);
+  }
+
 }

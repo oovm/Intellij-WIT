@@ -27,6 +27,10 @@ public class WionVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitFlagSign(@NotNull WionFlagSign o) {
+    visitPsiElement(o);
+  }
+
   public void visitIdentifier(@NotNull WionIdentifier o) {
     visitPsiElement(o);
   }
@@ -36,6 +40,10 @@ public class WionVisitor extends PsiElementVisitor {
   }
 
   public void visitListLiteral(@NotNull WionListLiteral o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNumberLiteral(@NotNull WionNumberLiteral o) {
     visitPsiElement(o);
   }
 

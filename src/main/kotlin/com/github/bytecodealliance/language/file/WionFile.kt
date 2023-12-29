@@ -10,11 +10,5 @@ import com.intellij.psi.FileViewProvider
 
 class WionFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, WionLanguage) {
     override fun getFileType(): FileType = WionFileType.INSTANCE
-    override fun getParserDefinition(): ParserDefinition {
-        // print file extension
-
-
-        return super.getParserDefinition()
-    }
     override fun toString(): String = MessageBundle.message("action.create_file")
 }

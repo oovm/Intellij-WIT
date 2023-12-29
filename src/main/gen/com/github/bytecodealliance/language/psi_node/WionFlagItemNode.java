@@ -28,9 +28,9 @@ public class WionFlagItemNode extends WionElement implements WionFlagItem {
   }
 
   @Override
-  @NotNull
+  @Nullable
   public WionIdentifier getIdentifier() {
-    return findNotNullChildByClass(WionIdentifier.class);
+    return findChildByClass(WionIdentifier.class);
   }
 
 }

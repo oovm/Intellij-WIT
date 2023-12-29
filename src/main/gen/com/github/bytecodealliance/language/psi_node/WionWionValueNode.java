@@ -47,6 +47,12 @@ public class WionWionValueNode extends WionElement implements WionWionValue {
 
   @Override
   @Nullable
+  public WionNumberLiteral getNumberLiteral() {
+    return findChildByClass(WionNumberLiteral.class);
+  }
+
+  @Override
+  @Nullable
   public WionOptionLiteral getOptionLiteral() {
     return findChildByClass(WionOptionLiteral.class);
   }

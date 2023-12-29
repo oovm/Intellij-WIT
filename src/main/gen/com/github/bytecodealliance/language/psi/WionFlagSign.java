@@ -5,12 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface WionFlagLiteral extends PsiElement {
-
-  @NotNull
-  List<WionFlagItem> getFlagItemList();
-
-  @NotNull
-  WionFlagSign getFlagSign();
+public interface WionFlagSign extends PsiElement {
 
 }
