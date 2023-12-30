@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface WionVariantLiteral extends PsiElement {
 
   @NotNull
-  WionIdentifier getIdentifier();
+  WionVariantName getVariantName();
 
   @Nullable
   WionWionValue getWionValue();

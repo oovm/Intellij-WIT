@@ -34,15 +34,17 @@
 
 
 wion ::= wion-value
-wion-value ::= KW_TRUE | KW_FALSE
-	| text-literal
+wion-value ::=
+	  text-literal
 	| number-literal
 	| dict-literal
 	| list-literal
 	| flag-literal
-	| option-literal
-	| result-literal
 	| variant-literal
+	| result-literal
+	| option-literal
+	| KW_TRUE
+	| KW_FALSE
 // 'raw' or "\n"
 text-literal ::= STRING_S1 | STRING_S2;
 // 0b01, 0o123, 123, 0x123
@@ -52,7 +54,7 @@ dict-literal ::= identifier? BRACE_L dict-item* BRACE_R {
 //    mixin = "com.github.bytecodealliance.language.mixin.MixinInclude"
 }
 dict-item  ::= dict-key EQUAL wion-value | COMMA;
-dict-key   ::= identifier;
+dict-key   ::= identifier | text-literal;
 // [true, false, 0]
 list-literal ::= BRACKET_L list-item* BRACKET_R {
 //    mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
@@ -67,17 +69,18 @@ flag-literal ::= flag-sign BRACKET_L flag-item* BRACKET_R {
 
 }
 flag-sign ::= ADD | SUB;
-flag-item ::= identifier | COMMA {
+flag-item ::= identifier | text-literal | COMMA {
 //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
 }
 // variant()
-option-literal ::= KW_SOME PARENTHESIS_L wion-value? PARENTHESIS_R
+option-literal  ::= KW_SOME PARENTHESIS_L wion-value? PARENTHESIS_R
 	| KW_NONE
-result-literal ::=
+result-literal  ::=
 	KW_FINE PARENTHESIS_L wion-value? PARENTHESIS_R
   | KW_FAIL PARENTHESIS_L wion-value? PARENTHESIS_R
-variant-literal ::= identifier PARENTHESIS_L wion-value? PARENTHESIS_R {
+variant-literal ::= variant-name PARENTHESIS_L wion-value? PARENTHESIS_R {
 //    mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
 }
+variant-name    ::= KW_NONE | KW_TRUE | KW_FALSE | identifier;
 /* Identifier */
 identifier ::= SYMBOL;

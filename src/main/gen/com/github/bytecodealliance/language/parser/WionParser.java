@@ -39,7 +39,6 @@ public class WionParser implements PsiParser, LightPsiParser {
   // dict-key EQUAL wion-value | COMMA
   public static boolean dict_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "dict_item")) return false;
-    if (!nextTokenIs(b, "<dict item>", COMMA, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, DICT_ITEM, "<dict item>");
     r = dict_item_0(b, l + 1);
@@ -61,14 +60,14 @@ public class WionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier
+  // identifier | text-literal
   public static boolean dict_key(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "dict_key")) return false;
-    if (!nextTokenIs(b, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, DICT_KEY, "<dict key>");
     r = identifier(b, l + 1);
-    exit_section_(b, m, DICT_KEY, r);
+    if (!r) r = text_literal(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -116,16 +115,16 @@ public class WionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier | COMMA {
+  // identifier | text-literal | COMMA {
   // //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
   // }
   public static boolean flag_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "flag_item")) return false;
-    if (!nextTokenIs(b, "<flag item>", COMMA, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FLAG_ITEM, "<flag item>");
     r = identifier(b, l + 1);
-    if (!r) r = flag_item_1(b, l + 1);
+    if (!r) r = text_literal(b, l + 1);
+    if (!r) r = flag_item_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -133,12 +132,12 @@ public class WionParser implements PsiParser, LightPsiParser {
   // COMMA {
   // //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
   // }
-  private static boolean flag_item_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "flag_item_1")) return false;
+  private static boolean flag_item_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "flag_item_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && flag_item_1_1(b, l + 1);
+    r = r && flag_item_2_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -146,7 +145,7 @@ public class WionParser implements PsiParser, LightPsiParser {
   // {
   // //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
   // }
-  private static boolean flag_item_1_1(PsiBuilder b, int l) {
+  private static boolean flag_item_2_1(PsiBuilder b, int l) {
     return true;
   }
 
@@ -394,20 +393,19 @@ public class WionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier PARENTHESIS_L wion-value? PARENTHESIS_R {
+  // variant-name PARENTHESIS_L wion-value? PARENTHESIS_R {
   // //    mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
   // }
   public static boolean variant_literal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "variant_literal")) return false;
-    if (!nextTokenIs(b, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = identifier(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, VARIANT_LITERAL, "<variant literal>");
+    r = variant_name(b, l + 1);
     r = r && consumeToken(b, PARENTHESIS_L);
     r = r && variant_literal_2(b, l + 1);
     r = r && consumeToken(b, PARENTHESIS_R);
     r = r && variant_literal_4(b, l + 1);
-    exit_section_(b, m, VARIANT_LITERAL, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -426,35 +424,50 @@ public class WionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // KW_NONE | KW_TRUE | KW_FALSE | identifier
+  public static boolean variant_name(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "variant_name")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, VARIANT_NAME, "<variant name>");
+    r = consumeToken(b, KW_NONE);
+    if (!r) r = consumeToken(b, KW_TRUE);
+    if (!r) r = consumeToken(b, KW_FALSE);
+    if (!r) r = identifier(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // wion-value
   static boolean wion(PsiBuilder b, int l) {
     return wion_value(b, l + 1);
   }
 
   /* ********************************************************** */
-  // KW_TRUE | KW_FALSE
-  // 	| text-literal
+  // text-literal
   // 	| number-literal
   // 	| dict-literal
   // 	| list-literal
   // 	| flag-literal
-  // 	| option-literal
-  // 	| result-literal
   // 	| variant-literal
+  // 	| result-literal
+  // 	| option-literal
+  // 	| KW_TRUE
+  // 	| KW_FALSE
   public static boolean wion_value(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "wion_value")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, WION_VALUE, "<wion value>");
-    r = consumeToken(b, KW_TRUE);
-    if (!r) r = consumeToken(b, KW_FALSE);
-    if (!r) r = text_literal(b, l + 1);
+    r = text_literal(b, l + 1);
     if (!r) r = number_literal(b, l + 1);
     if (!r) r = dict_literal(b, l + 1);
     if (!r) r = list_literal(b, l + 1);
     if (!r) r = flag_literal(b, l + 1);
-    if (!r) r = option_literal(b, l + 1);
-    if (!r) r = result_literal(b, l + 1);
     if (!r) r = variant_literal(b, l + 1);
+    if (!r) r = result_literal(b, l + 1);
+    if (!r) r = option_literal(b, l + 1);
+    if (!r) r = consumeToken(b, KW_TRUE);
+    if (!r) r = consumeToken(b, KW_FALSE);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

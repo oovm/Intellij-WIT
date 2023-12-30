@@ -29,8 +29,8 @@ public class WionVariantLiteralNode extends WionElement implements WionVariantLi
 
   @Override
   @NotNull
-  public WionIdentifier getIdentifier() {
-    return findNotNullChildByClass(WionIdentifier.class);
+  public WionVariantName getVariantName() {
+    return findNotNullChildByClass(WionVariantName.class);
   }
 
   @Override

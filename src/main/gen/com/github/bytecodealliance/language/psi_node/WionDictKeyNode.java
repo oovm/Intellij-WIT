@@ -28,9 +28,15 @@ public class WionDictKeyNode extends WionElement implements WionDictKey {
   }
 
   @Override
-  @NotNull
+  @Nullable
   public WionIdentifier getIdentifier() {
-    return findNotNullChildByClass(WionIdentifier.class);
+    return findChildByClass(WionIdentifier.class);
+  }
+
+  @Override
+  @Nullable
+  public WionTextLiteral getTextLiteral() {
+    return findChildByClass(WionTextLiteral.class);
   }
 
 }

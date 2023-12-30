@@ -13,12 +13,11 @@ class WionNodeHighlighter : WionVisitor(), HighlightVisitor {
     private var infoHolder: HighlightInfoHolder? = null
 
     override fun visitDictKey(o: WionDictKey) {
-
-        highlight(o.identifier, WionColor.KEY)
+        highlight(o, WionColor.KEY)
     }
 
-    override fun visitVariantLiteral(o: WionVariantLiteral) {
-        highlight(o.identifier, WionColor.VARIANT)
+    override fun visitVariantName(o: WionVariantName) {
+        highlight(o, WionColor.VARIANT)
     }
 
     override fun visitDictLiteral(o: WionDictLiteral) {

@@ -22,6 +22,7 @@ public interface WionTypes {
   IElementType RESULT_LITERAL = new WionElementType("RESULT_LITERAL");
   IElementType TEXT_LITERAL = new WionElementType("TEXT_LITERAL");
   IElementType VARIANT_LITERAL = new WionElementType("VARIANT_LITERAL");
+  IElementType VARIANT_NAME = new WionElementType("VARIANT_NAME");
   IElementType WION_VALUE = new WionElementType("WION_VALUE");
 
   IElementType ADD = new WionTokenType("ADD");
@@ -95,6 +96,9 @@ public interface WionTypes {
       }
       else if (type == VARIANT_LITERAL) {
         return new WionVariantLiteralNode(node);
+      }
+      else if (type == VARIANT_NAME) {
+        return new WionVariantNameNode(node);
       }
       else if (type == WION_VALUE) {
         return new WionWionValueNode(node);

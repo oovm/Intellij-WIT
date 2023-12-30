@@ -63,6 +63,10 @@ public class WionVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitVariantName(@NotNull WionVariantName o) {
+    visitPsiElement(o);
+  }
+
   public void visitWionValue(@NotNull WionWionValue o) {
     visitPsiElement(o);
   }

@@ -11,14 +11,14 @@ import static com.github.bytecodealliance.language.psi.WionTypes.*;
 import com.github.bytecodealliance.language.psi.WionElement;
 import com.github.bytecodealliance.language.psi.*;
 
-public class WionFlagItemNode extends WionElement implements WionFlagItem {
+public class WionVariantNameNode extends WionElement implements WionVariantName {
 
-  public WionFlagItemNode(@NotNull ASTNode node) {
+  public WionVariantNameNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull WionVisitor visitor) {
-    visitor.visitFlagItem(this);
+    visitor.visitVariantName(this);
   }
 
   @Override
@@ -31,12 +31,6 @@ public class WionFlagItemNode extends WionElement implements WionFlagItem {
   @Nullable
   public WionIdentifier getIdentifier() {
     return findChildByClass(WionIdentifier.class);
-  }
-
-  @Override
-  @Nullable
-  public WionTextLiteral getTextLiteral() {
-    return findChildByClass(WionTextLiteral.class);
   }
 
 }
