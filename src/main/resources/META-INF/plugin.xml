@@ -61,8 +61,11 @@
 		<!-- Highlight -->
 		<additionalTextAttributes scheme="Default" file="colors/FluentDefault.xml"/>
 		<additionalTextAttributes scheme="Darcula" file="colors/FluentDarcula.xml"/>
+
 		<colorSettingsPage implementation="com.github.bytecodealliance.ide.highlight.WitHighlightSetting"/>
 		<highlightVisitor implementation="com.github.bytecodealliance.ide.highlight.WitHighlightVisitor"/>
+
+		<colorSettingsPage implementation="com.github.bytecodealliance.ide.highlight.WionHighlightSetting"/>
 		<highlightVisitor implementation="com.github.bytecodealliance.ide.highlight.WionNodeHighlighter"/>
 
 

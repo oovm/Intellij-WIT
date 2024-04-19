@@ -18,35 +18,35 @@ class WitSyntaxHighlighter : SyntaxHighlighterBase() {
         return pack(getTokenColor(tokenType)?.textAttributesKey)
     }
 
-    private fun getTokenColor(tokenType: IElementType): HighlightColor? {
+    private fun getTokenColor(tokenType: IElementType): WitColor? {
         return when (tokenType) {
             KW_PACKAGE, KW_WORLD, KW_INTERFACE,
             KW_INCLUDE, KW_USE, KW_IMPORT, KW_EXPORT, KW_AS,
             KW_TYPE, KW_RESOURCE, KW_RECORD, KW_VARIANT, KW_FLAGS, KW_ENUM,
             KW_FUNCTION, KW_CONSTRUCTOR,
-            -> HighlightColor.KEYWORD
+            -> WitColor.KEYWORD
 
-            PARENTHESIS_L, PARENTHESIS_R -> HighlightColor.PARENTHESES
-            BRACKET_L, BRACKET_R -> HighlightColor.BRACKETS
-            BRACE_L, BRACE_R -> HighlightColor.BRACES
-            COLON, EQ -> HighlightColor.OPERATION
-            AT, STAR -> HighlightColor.OPERATION
+            PARENTHESIS_L, PARENTHESIS_R -> WitColor.PARENTHESES
+            BRACKET_L, BRACKET_R -> WitColor.BRACKETS
+            BRACE_L, BRACE_R -> WitColor.BRACES
+            COLON, EQ -> WitColor.OPERATION
+            AT, STAR -> WitColor.OPERATION
 
-            COMMA -> HighlightColor.COMMA
+            COMMA -> WitColor.COMMA
             // atom
-            VERSION -> HighlightColor.NUMBER
+            VERSION -> WitColor.NUMBER
 
-            SELECTION_LINE -> HighlightColor.TEXT
-            STRING_QUOTE, STRING_CHAR -> HighlightColor.STRING
-            STRING_ESCAPE -> HighlightColor.STRING_ESCAPED
+            SELECTION_LINE -> WitColor.TEXT
+            STRING_QUOTE, STRING_CHAR -> WitColor.STRING
+            STRING_ESCAPE -> WitColor.STRING_ESCAPED
 //            STRING -> AwslColor.STRING
-            SYMBOL -> HighlightColor.IDENTIFIER
+            SYMBOL -> WitColor.IDENTIFIER
             // 注释
-            COMMENT_LINE -> HighlightColor.LINE_COMMENT
-            COMMENT_BLOCK -> HighlightColor.BLOCK_COMMENT
-            COMMENT_DOCUMENT -> HighlightColor.DOC_COMMENT
+            COMMENT_LINE -> WitColor.LINE_COMMENT
+            COMMENT_BLOCK -> WitColor.BLOCK_COMMENT
+            COMMENT_DOCUMENT -> WitColor.DOC_COMMENT
             // 错误
-            TokenType.BAD_CHARACTER -> HighlightColor.BAD_CHARACTER
+            TokenType.BAD_CHARACTER -> WitColor.BAD_CHARACTER
             else -> null
         }
     }
