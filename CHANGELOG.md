@@ -2,6 +2,10 @@
 
 # Wit-Intellij Changelog
 
+## [0.1.1]
+### Fix
+- Fix example in highlight configuration
+
 ## [0.1.0]
 ### Added
 - Support wit language server protocol
