@@ -2,7 +2,7 @@ package com.github.bytecodealliance.language;
 
 
 import static com.github.bytecodealliance.language.psi.WionTypes.*;
-import static com.intellij.json.JsonElementTypes.LINE_COMMENT;
+//import static com.intellij.json.JsonElementTypes.LINE_COMMENT;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
 
@@ -53,7 +53,7 @@ KW_FALSE = "false"
 
 <YYINITIAL> {
     {WHITE_SPACE}+     { return WHITE_SPACE; }
-	{COMMENT_LINE}     { return LINE_COMMENT; }
+	{COMMENT_LINE}     { return COMMENT_LINE; }
 //	{COMMENT_BLOCK}    { return COMMENT_BLOCK; }
 }
 

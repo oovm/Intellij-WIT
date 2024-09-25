@@ -59,6 +59,10 @@ public class WionVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitUseless(@NotNull WionUseless o) {
+    visitPsiElement(o);
+  }
+
   public void visitVariantLiteral(@NotNull WionVariantLiteral o) {
     visitPsiElement(o);
   }

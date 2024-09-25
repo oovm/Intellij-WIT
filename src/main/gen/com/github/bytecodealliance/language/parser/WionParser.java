@@ -393,6 +393,18 @@ public class WionParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // COMMENT_LINE
+  public static boolean useless(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "useless")) return false;
+    if (!nextTokenIs(b, COMMENT_LINE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMENT_LINE);
+    exit_section_(b, m, USELESS, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // variant-name PARENTHESIS_L wion-value? PARENTHESIS_R {
   // //    mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
   // }

@@ -84,3 +84,5 @@ variant-literal ::= variant-name PARENTHESIS_L wion-value? PARENTHESIS_R {
 variant-name    ::= KW_NONE | KW_TRUE | KW_FALSE | identifier;
 /* Identifier */
 identifier ::= SYMBOL;
+
+useless ::= COMMENT_LINE;

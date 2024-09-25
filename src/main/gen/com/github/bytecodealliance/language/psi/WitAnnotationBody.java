@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface WitDefineInterface extends PsiElement {
+public interface WitAnnotationBody extends PsiElement {
 
   @NotNull
-  List<WitAnnotation> getAnnotationList();
-
-  @Nullable
-  WitInterfaceBody getInterfaceBody();
-
-  @Nullable
-  WitInterfaceName getInterfaceName();
+  WitIdentifier getIdentifier();
 
 }

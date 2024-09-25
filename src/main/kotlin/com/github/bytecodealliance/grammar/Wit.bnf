@@ -142,8 +142,8 @@ use-alias ::= identifier (KW_AS alias-name)? {
 }
 
 // interface name { }
-define-interface ::= KW_INTERFACE interface-name interface-body {
-	pin = 1
+define-interface ::= annotation*  KW_INTERFACE interface-name interface-body {
+	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
 }
 // exports: interface
@@ -175,6 +175,13 @@ function ::= identifier COLON function-signature {
 function-signature ::= modifier? KW_FUNCTION tuple (TO type-hint)? {
 	pin = 2
 }
+// =====================================================================================================
+// @since(version = 0.2.0)
+annotation ::= AT identifier annotation-body? {
+	pin = 2
+}
+annotation-body ::= PARENTHESIS_L identifier EQ VERSION PARENTHESIS_R
+
 
 // type type-name = type-hint;
 define-type ::= KW_TYPE identifier EQ type-hint {

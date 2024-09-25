@@ -21,6 +21,7 @@ public interface WionTypes {
   IElementType OPTION_LITERAL = new WionElementType("OPTION_LITERAL");
   IElementType RESULT_LITERAL = new WionElementType("RESULT_LITERAL");
   IElementType TEXT_LITERAL = new WionElementType("TEXT_LITERAL");
+  IElementType USELESS = new WionElementType("USELESS");
   IElementType VARIANT_LITERAL = new WionElementType("VARIANT_LITERAL");
   IElementType VARIANT_NAME = new WionElementType("VARIANT_NAME");
   IElementType WION_VALUE = new WionElementType("WION_VALUE");
@@ -32,6 +33,7 @@ public interface WionTypes {
   IElementType BRACKET_L = new WionTokenType("[");
   IElementType BRACKET_R = new WionTokenType("]");
   IElementType COMMA = new WionTokenType(",");
+  IElementType COMMENT_LINE = new WionTokenType("COMMENT_LINE");
   IElementType DEC = new WionTokenType("DEC");
   IElementType EQUAL = new WionTokenType("=");
   IElementType HEX = new WionTokenType("HEX");
@@ -93,6 +95,9 @@ public interface WionTypes {
       }
       else if (type == TEXT_LITERAL) {
         return new WionTextLiteralNode(node);
+      }
+      else if (type == USELESS) {
+        return new WionUselessNode(node);
       }
       else if (type == VARIANT_LITERAL) {
         return new WionVariantLiteralNode(node);
