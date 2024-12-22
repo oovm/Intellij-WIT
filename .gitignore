@@ -2,3 +2,5 @@
 .idea
 .qodana
 build
+/.intellijPlatform/self-update.lock
+/.kotlin/sessions/kotlin-compiler-15524720590620423196.salive
