@@ -2,7 +2,7 @@ package com.github.bytecodealliance.ide.highlight
 
 import com.github.bytecodealliance.language.psi.WionParserDefinition
 import com.github.bytecodealliance.language.psi.WionTypes.*
-import com.intellij.json.JsonElementTypes
+//import com.intellij.json.JsonElementTypes
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighter
@@ -32,8 +32,8 @@ class WionTokenHighlighter : SyntaxHighlighter {
 
             ADD, SUB -> WionColor.BUILTIN
             // 注释
-            JsonElementTypes.LINE_COMMENT -> WionColor.LINE_COMMENT
-            JsonElementTypes.BLOCK_COMMENT -> WionColor.BLOCK_COMMENT
+//            JsonElementTypes.LINE_COMMENT -> WionColor.LINE_COMMENT
+//            JsonElementTypes.BLOCK_COMMENT -> WionColor.BLOCK_COMMENT
             // 错误
             TokenType.BAD_CHARACTER -> WionColor.BAD_CHARACTER
             else -> null

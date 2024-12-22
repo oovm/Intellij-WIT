@@ -7,7 +7,7 @@ import com.github.bytecodealliance.language.file.WionFile
 import com.github.bytecodealliance.language.file.WitFileX
 import com.github.bytecodealliance.language.parser.WionParser
 import com.github.bytecodealliance.language.parser.WitxParser
-import com.intellij.json.JsonTokenSets
+//import com.intellij.json.JsonTokenSets
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.lang.PsiParser
@@ -27,7 +27,8 @@ class WionParserDefinition : ParserDefinition {
     override fun createParser(project: Project) = WionParser()
     override fun getFileNodeType() = IFileElementType(WionLanguage)
     override fun getCommentTokens(): TokenSet {
-        return JsonTokenSets.JSON_COMMENTARIES
+//        return JsonTokenSets.JSON_COMMENTARIES
+        return TokenSet.EMPTY
     }
 
     override fun getStringLiteralElements(): TokenSet = TokenSet.create()

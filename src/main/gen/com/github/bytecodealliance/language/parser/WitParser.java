@@ -49,6 +49,42 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // AT identifier annotation-body?
+  public static boolean annotation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation")) return false;
+    if (!nextTokenIs(b, AT)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, ANNOTATION, null);
+    r = consumeToken(b, AT);
+    r = r && identifier(b, l + 1);
+    p = r; // pin = 2
+    r = r && annotation_2(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // annotation-body?
+  private static boolean annotation_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_2")) return false;
+    annotation_body(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // PARENTHESIS_L identifier EQ VERSION PARENTHESIS_R
+  public static boolean annotation_body(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_body")) return false;
+    if (!nextTokenIs(b, PARENTHESIS_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PARENTHESIS_L);
+    r = r && identifier(b, l + 1);
+    r = r && consumeTokens(b, 0, EQ, VERSION, PARENTHESIS_R);
+    exit_section_(b, m, ANNOTATION_BODY, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // KW_CONSTRUCTOR tuple (TO type-hint)?
   public static boolean constructor(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "constructor")) return false;
@@ -82,18 +118,30 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // KW_INTERFACE interface-name interface-body
+  // annotation*  KW_INTERFACE interface-name interface-body
   public static boolean define_interface(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "define_interface")) return false;
-    if (!nextTokenIs(b, KW_INTERFACE)) return false;
+    if (!nextTokenIs(b, "<define interface>", AT, KW_INTERFACE)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, DEFINE_INTERFACE, null);
-    r = consumeToken(b, KW_INTERFACE);
-    p = r; // pin = 1
+    Marker m = enter_section_(b, l, _NONE_, DEFINE_INTERFACE, "<define interface>");
+    r = define_interface_0(b, l + 1);
+    r = r && consumeToken(b, KW_INTERFACE);
+    p = r; // pin = 2
     r = r && report_error_(b, interface_name(b, l + 1));
     r = p && interface_body(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // annotation*
+  private static boolean define_interface_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "define_interface_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!annotation(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "define_interface_0", c)) break;
+    }
+    return true;
   }
 
   /* ********************************************************** */

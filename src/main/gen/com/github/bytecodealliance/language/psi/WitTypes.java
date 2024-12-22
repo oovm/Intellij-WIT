@@ -9,6 +9,8 @@ import com.github.bytecodealliance.language.psi_node.*;
 public interface WitTypes {
 
   IElementType ALIAS_NAME = new WitElementType("ALIAS_NAME");
+  IElementType ANNOTATION = new WitElementType("ANNOTATION");
+  IElementType ANNOTATION_BODY = new WitElementType("ANNOTATION_BODY");
   IElementType CONSTRUCTOR = new WitElementType("CONSTRUCTOR");
   IElementType DEFINE_INTERFACE = new WitElementType("DEFINE_INTERFACE");
   IElementType DEFINE_TYPE = new WitElementType("DEFINE_TYPE");
@@ -103,6 +105,12 @@ public interface WitTypes {
       IElementType type = node.getElementType();
       if (type == ALIAS_NAME) {
         return new WitAliasNameNode(node);
+      }
+      else if (type == ANNOTATION) {
+        return new WitAnnotationNode(node);
+      }
+      else if (type == ANNOTATION_BODY) {
+        return new WitAnnotationBodyNode(node);
       }
       else if (type == CONSTRUCTOR) {
         return new WitConstructorNode(node);

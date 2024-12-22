@@ -1,7 +1,7 @@
 package com.github.bytecodealliance.ide.highlight
 
 import com.github.bytecodealliance.MessageBundle
-import com.intellij.json.highlighting.JsonSyntaxHighlighterFactory
+//import com.intellij.json.highlighting.JsonSyntaxHighlighterFactory
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.HighlighterColors
@@ -30,7 +30,8 @@ enum class WionColor(humanName: Supplier<@NlsContexts.AttributeDescriptor String
         OptionsBundle.messagePointer("options.language.defaults.identifier"),
         DefaultLanguageHighlighterColors.IDENTIFIER
     ),
-    KEY(MessageBundle.messagePointer("color.token.symbol.key"), JsonSyntaxHighlighterFactory.JSON_PROPERTY_KEY),
+//    KEY(MessageBundle.messagePointer("color.token.symbol.key"), JsonSyntaxHighlighterFactory.JSON_PROPERTY_KEY),
+    KEY(MessageBundle.messagePointer("color.token.symbol.key"), DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL),
     RECORD(
         MessageBundle.messagePointer("color.token.symbol.record"),
         DefaultLanguageHighlighterColors.CLASS_NAME

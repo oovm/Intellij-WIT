@@ -8,17 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.bytecodealliance.language.psi.WitTypes.*;
-import com.github.bytecodealliance.language.mixin.MixinInterface;
+import com.github.bytecodealliance.language.psi.WitElement;
 import com.github.bytecodealliance.language.psi.*;
 
-public class WitDefineInterfaceNode extends MixinInterface implements WitDefineInterface {
+public class WitAnnotationNode extends WitElement implements WitAnnotation {
 
-  public WitDefineInterfaceNode(@NotNull ASTNode node) {
+  public WitAnnotationNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull WitVisitor visitor) {
-    visitor.visitDefineInterface(this);
+    visitor.visitAnnotation(this);
   }
 
   @Override
@@ -28,21 +28,15 @@ public class WitDefineInterfaceNode extends MixinInterface implements WitDefineI
   }
 
   @Override
+  @Nullable
+  public WitAnnotationBody getAnnotationBody() {
+    return findChildByClass(WitAnnotationBody.class);
+  }
+
+  @Override
   @NotNull
-  public List<WitAnnotation> getAnnotationList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitAnnotation.class);
-  }
-
-  @Override
-  @Nullable
-  public WitInterfaceBody getInterfaceBody() {
-    return findChildByClass(WitInterfaceBody.class);
-  }
-
-  @Override
-  @Nullable
-  public WitInterfaceName getInterfaceName() {
-    return findChildByClass(WitInterfaceName.class);
+  public WitIdentifier getIdentifier() {
+    return findNotNullChildByClass(WitIdentifier.class);
   }
 
 }
