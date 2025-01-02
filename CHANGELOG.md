@@ -2,6 +2,10 @@
 
 # Wit-Intellij Changelog
 
+## [0.1.2]
+### Added
+- Support `@since` annotation
+
 ## [0.1.1]
 ### Fix
 - Fix example in highlight configuration
