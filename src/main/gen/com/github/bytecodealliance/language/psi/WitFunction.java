@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface WitFunction extends PsiElement {
 
   @NotNull
+  List<WitAnnotation> getAnnotationList();
+
+  @NotNull
   WitFunctionSignature getFunctionSignature();
 
   @NotNull

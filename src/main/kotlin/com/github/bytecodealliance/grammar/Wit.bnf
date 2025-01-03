@@ -93,8 +93,8 @@ package ::= KW_PACKAGE package-name {
 package-name ::= module-name (COLON module-name)* package-version?;
 package-version ::= AT VERSION;
 // world name { }
-world ::= modifier? KW_WORLD identifier BRACE_L world-element* BRACE_R {
-	pin = 2
+world ::= annotation* modifier? KW_WORLD identifier BRACE_L world-element* BRACE_R {
+	pin = 3
     mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
 }
 private world-element ::= SEMICOLON
@@ -169,7 +169,7 @@ method ::= identifier COLON function-signature {
 constructor ::= KW_CONSTRUCTOR tuple (TO type-hint)? {
 	pin = 1
 }
-function ::= identifier COLON function-signature {
+function ::= annotation* identifier COLON function-signature {
 	mixin = "com.github.bytecodealliance.language.mixin.MixinFunction"
 }
 function-signature ::= modifier? KW_FUNCTION tuple (TO type-hint)? {

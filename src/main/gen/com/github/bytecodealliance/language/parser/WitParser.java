@@ -245,7 +245,6 @@ public class WitParser implements PsiParser, LightPsiParser {
   // 	| include-name
   public static boolean export_term(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "export_term")) return false;
-    if (!nextTokenIs(b, "<export term>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, EXPORT_TERM, "<export term>");
     r = function(b, l + 1);
@@ -321,17 +320,28 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier COLON function-signature
+  // annotation* identifier COLON function-signature
   public static boolean function(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "function")) return false;
-    if (!nextTokenIs(b, "<function>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION, "<function>");
-    r = identifier(b, l + 1);
+    r = function_0(b, l + 1);
+    r = r && identifier(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && function_signature(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  // annotation*
+  private static boolean function_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "function_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!annotation(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "function_0", c)) break;
+    }
+    return true;
   }
 
   /* ********************************************************** */
@@ -1211,37 +1221,48 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // modifier? KW_WORLD identifier BRACE_L world-element* BRACE_R
+  // annotation* modifier? KW_WORLD identifier BRACE_L world-element* BRACE_R
   public static boolean world(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "world")) return false;
-    if (!nextTokenIs(b, "<world>", KW_WORLD, SYMBOL)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, WORLD, "<world>");
     r = world_0(b, l + 1);
+    r = r && world_1(b, l + 1);
     r = r && consumeToken(b, KW_WORLD);
-    p = r; // pin = 2
+    p = r; // pin = 3
     r = r && report_error_(b, identifier(b, l + 1));
     r = p && report_error_(b, consumeToken(b, BRACE_L)) && r;
-    r = p && report_error_(b, world_4(b, l + 1)) && r;
+    r = p && report_error_(b, world_5(b, l + 1)) && r;
     r = p && consumeToken(b, BRACE_R) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // modifier?
+  // annotation*
   private static boolean world_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "world_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!annotation(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "world_0", c)) break;
+    }
+    return true;
+  }
+
+  // modifier?
+  private static boolean world_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "world_1")) return false;
     modifier(b, l + 1);
     return true;
   }
 
   // world-element*
-  private static boolean world_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "world_4")) return false;
+  private static boolean world_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "world_5")) return false;
     while (true) {
       int c = current_position_(b);
       if (!world_element(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "world_4", c)) break;
+      if (!empty_element_parsed_guard_(b, "world_5", c)) break;
     }
     return true;
   }

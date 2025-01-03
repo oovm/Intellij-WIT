@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface WitWorld extends PsiElement {
 
   @NotNull
+  List<WitAnnotation> getAnnotationList();
+
+  @NotNull
   List<WitDefineType> getDefineTypeList();
 
   @NotNull
