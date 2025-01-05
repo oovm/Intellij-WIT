@@ -28,6 +28,12 @@ public class WitUseNode extends WitElement implements WitUse {
   }
 
   @Override
+  @NotNull
+  public WitAnnotations getAnnotations() {
+    return findNotNullChildByClass(WitAnnotations.class);
+  }
+
+  @Override
   @Nullable
   public WitIncludeName getIncludeName() {
     return findChildByClass(WitIncludeName.class);

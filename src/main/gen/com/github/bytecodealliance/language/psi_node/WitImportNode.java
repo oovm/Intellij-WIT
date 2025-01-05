@@ -28,6 +28,12 @@ public class WitImportNode extends WitElement implements WitImport {
   }
 
   @Override
+  @NotNull
+  public WitAnnotations getAnnotations() {
+    return findNotNullChildByClass(WitAnnotations.class);
+  }
+
+  @Override
   @Nullable
   public WitExportTerm getExportTerm() {
     return findChildByClass(WitExportTerm.class);

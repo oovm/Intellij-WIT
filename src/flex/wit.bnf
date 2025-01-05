@@ -93,7 +93,7 @@ package ::= KW_PACKAGE package-name {
 package-name ::= module-name (COLON module-name)* package-version?;
 package-version ::= AT VERSION;
 // world name { }
-world ::= annotation* modifier? KW_WORLD identifier BRACE_L world-element* BRACE_R {
+world ::= annotations modifier? KW_WORLD identifier BRACE_L world-element* BRACE_R {
 	pin = 3
     mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
 }
@@ -109,7 +109,7 @@ private world-element ::= SEMICOLON
 	| resource
 	| COMMENT_LINE
 // include wasi:keyvalue/imports@0.2.0-draft;
-include ::= KW_INCLUDE include-name {
+include ::= annotations KW_INCLUDE include-name {
 	pin = 1
     mixin = "com.github.bytecodealliance.language.mixin.MixinInclude"
 }
@@ -120,10 +120,10 @@ include-name ::=
 // import error-code: func(err: u32) -> option<u32>;
 // export imports;
 // export my:dep/a@0.2.0;
-import    ::= KW_IMPORT export-term {
+import    ::= annotations KW_IMPORT export-term {
 	pin = 1
 }
-export    ::= KW_EXPORT export-term {
+export    ::= annotations KW_EXPORT export-term {
 	pin = 1
 }
 export-term ::= function
@@ -131,8 +131,8 @@ export-term ::= function
 	| include-name
 //  use wasi:poll/poll.{pollable};
 //  use wasi:io/streams@0.2.0.{input-stream, output-stream};
-use      ::= KW_USE include-name use-items? {
-	pin = 1
+use      ::= annotations KW_USE include-name use-items? {
+	pin = 2
 }
 use-items ::= DOT BRACE_L (use-alias (COMMA use-alias)* COMMA?)? BRACE_R {
 	pin = 1
@@ -142,7 +142,7 @@ use-alias ::= identifier (KW_AS alias-name)? {
 }
 
 // interface name { }
-define-interface ::= annotation*  KW_INTERFACE interface-name interface-body {
+define-interface ::= annotations  KW_INTERFACE interface-name interface-body {
 	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
 }
@@ -169,7 +169,7 @@ method ::= identifier COLON function-signature {
 constructor ::= KW_CONSTRUCTOR tuple (TO type-hint)? {
 	pin = 1
 }
-function ::= annotation* identifier COLON function-signature {
+function ::= annotations identifier COLON function-signature {
 	mixin = "com.github.bytecodealliance.language.mixin.MixinFunction"
 }
 function-signature ::= modifier? KW_FUNCTION tuple (TO type-hint)? {
@@ -177,6 +177,7 @@ function-signature ::= modifier? KW_FUNCTION tuple (TO type-hint)? {
 }
 // =====================================================================================================
 // @since(version = 0.2.0)
+annotations ::= annotation*;
 annotation ::= AT identifier annotation-body? {
 	pin = 2
 }

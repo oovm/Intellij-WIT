@@ -29,8 +29,8 @@ public class WitDefineInterfaceNode extends MixinInterface implements WitDefineI
 
   @Override
   @NotNull
-  public List<WitAnnotation> getAnnotationList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitAnnotation.class);
+  public WitAnnotations getAnnotations() {
+    return findNotNullChildByClass(WitAnnotations.class);
   }
 
   @Override

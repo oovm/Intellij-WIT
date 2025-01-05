@@ -8,17 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.bytecodealliance.language.psi.WitTypes.*;
-import com.github.bytecodealliance.language.mixin.MixinInclude;
+import com.github.bytecodealliance.language.psi.WitElement;
 import com.github.bytecodealliance.language.psi.*;
 
-public class WitIncludeNode extends MixinInclude implements WitInclude {
+public class WitAnnotationsNode extends WitElement implements WitAnnotations {
 
-  public WitIncludeNode(@NotNull ASTNode node) {
+  public WitAnnotationsNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull WitVisitor visitor) {
-    visitor.visitInclude(this);
+    visitor.visitAnnotations(this);
   }
 
   @Override
@@ -29,14 +29,8 @@ public class WitIncludeNode extends MixinInclude implements WitInclude {
 
   @Override
   @NotNull
-  public WitAnnotations getAnnotations() {
-    return findNotNullChildByClass(WitAnnotations.class);
-  }
-
-  @Override
-  @Nullable
-  public WitIncludeName getIncludeName() {
-    return findChildByClass(WitIncludeName.class);
+  public List<WitAnnotation> getAnnotationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitAnnotation.class);
   }
 
 }

@@ -10,6 +10,7 @@ public interface WitTypes {
 
   IElementType ALIAS_NAME = new WitElementType("ALIAS_NAME");
   IElementType ANNOTATION = new WitElementType("ANNOTATION");
+  IElementType ANNOTATIONS = new WitElementType("ANNOTATIONS");
   IElementType ANNOTATION_BODY = new WitElementType("ANNOTATION_BODY");
   IElementType CONSTRUCTOR = new WitElementType("CONSTRUCTOR");
   IElementType DEFINE_INTERFACE = new WitElementType("DEFINE_INTERFACE");
@@ -108,6 +109,9 @@ public interface WitTypes {
       }
       else if (type == ANNOTATION) {
         return new WitAnnotationNode(node);
+      }
+      else if (type == ANNOTATIONS) {
+        return new WitAnnotationsNode(node);
       }
       else if (type == ANNOTATION_BODY) {
         return new WitAnnotationBodyNode(node);

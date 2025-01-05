@@ -19,6 +19,10 @@ public class WitVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitAnnotations(@NotNull WitAnnotations o) {
+    visitPsiElement(o);
+  }
+
   public void visitConstructor(@NotNull WitConstructor o) {
     visitPsiElement(o);
   }

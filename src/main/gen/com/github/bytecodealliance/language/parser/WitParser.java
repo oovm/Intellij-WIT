@@ -85,6 +85,20 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // annotation*
+  public static boolean annotations(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotations")) return false;
+    Marker m = enter_section_(b, l, _NONE_, ANNOTATIONS, "<annotations>");
+    while (true) {
+      int c = current_position_(b);
+      if (!annotation(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "annotations", c)) break;
+    }
+    exit_section_(b, l, m, true, false, null);
+    return true;
+  }
+
+  /* ********************************************************** */
   // KW_CONSTRUCTOR tuple (TO type-hint)?
   public static boolean constructor(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "constructor")) return false;
@@ -118,30 +132,19 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotation*  KW_INTERFACE interface-name interface-body
+  // annotations  KW_INTERFACE interface-name interface-body
   public static boolean define_interface(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "define_interface")) return false;
     if (!nextTokenIs(b, "<define interface>", AT, KW_INTERFACE)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, DEFINE_INTERFACE, "<define interface>");
-    r = define_interface_0(b, l + 1);
+    r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_INTERFACE);
     p = r; // pin = 2
     r = r && report_error_(b, interface_name(b, l + 1));
     r = p && interface_body(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  // annotation*
-  private static boolean define_interface_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "define_interface_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!annotation(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "define_interface_0", c)) break;
-    }
-    return true;
   }
 
   /* ********************************************************** */
@@ -226,15 +229,15 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // KW_EXPORT export-term
+  // annotations KW_EXPORT export-term
   public static boolean export(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "export")) return false;
-    if (!nextTokenIs(b, KW_EXPORT)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, EXPORT, null);
-    r = consumeToken(b, KW_EXPORT);
+    Marker m = enter_section_(b, l, _NONE_, EXPORT, "<export>");
+    r = annotations(b, l + 1);
     p = r; // pin = 1
-    r = r && export_term(b, l + 1);
+    r = r && report_error_(b, consumeToken(b, KW_EXPORT));
+    r = p && export_term(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -320,28 +323,17 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotation* identifier COLON function-signature
+  // annotations identifier COLON function-signature
   public static boolean function(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "function")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION, "<function>");
-    r = function_0(b, l + 1);
+    r = annotations(b, l + 1);
     r = r && identifier(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && function_signature(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
-  }
-
-  // annotation*
-  private static boolean function_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "function_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!annotation(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "function_0", c)) break;
-    }
-    return true;
   }
 
   /* ********************************************************** */
@@ -461,29 +453,29 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // KW_IMPORT export-term
+  // annotations KW_IMPORT export-term
   public static boolean import_$(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_$")) return false;
-    if (!nextTokenIs(b, KW_IMPORT)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, IMPORT, null);
-    r = consumeToken(b, KW_IMPORT);
+    Marker m = enter_section_(b, l, _NONE_, IMPORT, "<import $>");
+    r = annotations(b, l + 1);
     p = r; // pin = 1
-    r = r && export_term(b, l + 1);
+    r = r && report_error_(b, consumeToken(b, KW_IMPORT));
+    r = p && export_term(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
   /* ********************************************************** */
-  // KW_INCLUDE include-name
+  // annotations KW_INCLUDE include-name
   public static boolean include(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "include")) return false;
-    if (!nextTokenIs(b, KW_INCLUDE)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, INCLUDE, null);
-    r = consumeToken(b, KW_INCLUDE);
+    Marker m = enter_section_(b, l, _NONE_, INCLUDE, "<include>");
+    r = annotations(b, l + 1);
     p = r; // pin = 1
-    r = r && include_name(b, l + 1);
+    r = r && report_error_(b, consumeToken(b, KW_INCLUDE));
+    r = p && include_name(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -988,23 +980,24 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // KW_USE include-name use-items?
+  // annotations KW_USE include-name use-items?
   public static boolean use(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "use")) return false;
-    if (!nextTokenIs(b, KW_USE)) return false;
+    if (!nextTokenIs(b, "<use>", AT, KW_USE)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, USE, null);
-    r = consumeToken(b, KW_USE);
-    p = r; // pin = 1
+    Marker m = enter_section_(b, l, _NONE_, USE, "<use>");
+    r = annotations(b, l + 1);
+    r = r && consumeToken(b, KW_USE);
+    p = r; // pin = 2
     r = r && report_error_(b, include_name(b, l + 1));
-    r = p && use_2(b, l + 1) && r;
+    r = p && use_3(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
   // use-items?
-  private static boolean use_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "use_2")) return false;
+  private static boolean use_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "use_3")) return false;
     use_items(b, l + 1);
     return true;
   }
@@ -1221,12 +1214,12 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotation* modifier? KW_WORLD identifier BRACE_L world-element* BRACE_R
+  // annotations modifier? KW_WORLD identifier BRACE_L world-element* BRACE_R
   public static boolean world(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "world")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, WORLD, "<world>");
-    r = world_0(b, l + 1);
+    r = annotations(b, l + 1);
     r = r && world_1(b, l + 1);
     r = r && consumeToken(b, KW_WORLD);
     p = r; // pin = 3
@@ -1236,17 +1229,6 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = p && consumeToken(b, BRACE_R) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  // annotation*
-  private static boolean world_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "world_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!annotation(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "world_0", c)) break;
-    }
-    return true;
   }
 
   // modifier?

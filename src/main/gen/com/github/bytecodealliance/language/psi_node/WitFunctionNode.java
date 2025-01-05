@@ -29,8 +29,8 @@ public class WitFunctionNode extends MixinFunction implements WitFunction {
 
   @Override
   @NotNull
-  public List<WitAnnotation> getAnnotationList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitAnnotation.class);
+  public WitAnnotations getAnnotations() {
+    return findNotNullChildByClass(WitAnnotations.class);
   }
 
   @Override
