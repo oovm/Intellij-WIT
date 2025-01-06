@@ -77,19 +77,16 @@
 
 // https://github.com/bytecodealliance/fluent/blob/master/spec/fluent.ebnf
 wit ::= statements*
-private statements ::=
-    package
-  | world
-  | include
-  | define-interface
-  | SEMICOLON
-
+private statements ::= SEMICOLON
+	| package
+	| world
+	| include
+	| define-interface
 // package wasi:blobstore@0.2.0-draft;
 package ::= KW_PACKAGE package-name {
 	pin = 1
     mixin = "com.github.bytecodealliance.language.mixin.MixinPackage"
 }
-
 package-name ::= module-name (COLON module-name)* package-version?;
 package-version ::= AT VERSION;
 // world name { }
@@ -110,7 +107,7 @@ private world-element ::= SEMICOLON
 	| COMMENT_LINE
 // include wasi:keyvalue/imports@0.2.0-draft;
 include ::= annotations KW_INCLUDE include-name {
-	pin = 1
+	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinInclude"
 }
 include-name ::=

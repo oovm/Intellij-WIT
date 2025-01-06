@@ -45,10 +45,9 @@ private class CheckVisitor(holder: AnnotationHolder): WitAnnotator(holder) {
     override fun visitPackageName(o: WitPackageName) {
         println(o.text)
         for (name in o.moduleNameList) {
-            holder.newAnnotation(HighlightSeverity.ERROR, "Nested namespace dost not support yet")
-                .range(name.textRange)
-
-                .create()
+//            holder.newAnnotation(HighlightSeverity.ERROR, "Nested namespace dost not support yet")
+//                .range(name.textRange)
+//                .create()
         }
     }
 }

@@ -470,12 +470,13 @@ public class WitParser implements PsiParser, LightPsiParser {
   // annotations KW_INCLUDE include-name
   public static boolean include(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "include")) return false;
+    if (!nextTokenIs(b, "<include>", AT, KW_INCLUDE)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, INCLUDE, "<include>");
     r = annotations(b, l + 1);
-    p = r; // pin = 1
-    r = r && report_error_(b, consumeToken(b, KW_INCLUDE));
-    r = p && include_name(b, l + 1) && r;
+    r = r && consumeToken(b, KW_INCLUDE);
+    p = r; // pin = 2
+    r = r && include_name(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -869,19 +870,19 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // package
-  //   | world
-  //   | include
-  //   | define-interface
-  //   | SEMICOLON
+  // SEMICOLON
+  // 	| package
+  // 	| world
+  // 	| include
+  // 	| define-interface
   static boolean statements(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "statements")) return false;
     boolean r;
-    r = package_$(b, l + 1);
+    r = consumeToken(b, SEMICOLON);
+    if (!r) r = package_$(b, l + 1);
     if (!r) r = world(b, l + 1);
     if (!r) r = include(b, l + 1);
     if (!r) r = define_interface(b, l + 1);
-    if (!r) r = consumeToken(b, SEMICOLON);
     return r;
   }
 

@@ -5,6 +5,8 @@
 ## [0.1.2]
 ### Added
 - Support `@since` annotation
+### Fix
+- Remove `Nested namespace dost not support yet` hint
 
 ## [0.1.1]
 ### Fix
