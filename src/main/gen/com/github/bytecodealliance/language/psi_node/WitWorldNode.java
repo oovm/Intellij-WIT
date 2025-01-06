@@ -70,12 +70,6 @@ public class WitWorldNode extends MixinWorld implements WitWorld {
   }
 
   @Override
-  @Nullable
-  public WitModifier getModifier() {
-    return findChildByClass(WitModifier.class);
-  }
-
-  @Override
   @NotNull
   public List<WitRecord> getRecordList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, WitRecord.class);

@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface WitAnnotationBody extends PsiElement {
 
   @NotNull
-  WitIdentifier getIdentifier();
+  List<WitIdentifier> getIdentifierList();
 
 }

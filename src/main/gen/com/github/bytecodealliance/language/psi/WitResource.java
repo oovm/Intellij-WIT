@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface WitResource extends PsiElement {
 
   @NotNull
+  WitAnnotations getAnnotations();
+
+  @NotNull
   List<WitConstructor> getConstructorList();
 
   @Nullable

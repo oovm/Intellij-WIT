@@ -29,8 +29,8 @@ public class WitAnnotationBodyNode extends WitElement implements WitAnnotationBo
 
   @Override
   @NotNull
-  public WitIdentifier getIdentifier() {
-    return findNotNullChildByClass(WitIdentifier.class);
+  public List<WitIdentifier> getIdentifierList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitIdentifier.class);
   }
 
 }

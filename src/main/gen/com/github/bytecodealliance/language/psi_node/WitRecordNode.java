@@ -28,6 +28,12 @@ public class WitRecordNode extends MixinRecord implements WitRecord {
   }
 
   @Override
+  @NotNull
+  public WitAnnotations getAnnotations() {
+    return findNotNullChildByClass(WitAnnotations.class);
+  }
+
+  @Override
   @Nullable
   public WitIdentifier getIdentifier() {
     return findChildByClass(WitIdentifier.class);
