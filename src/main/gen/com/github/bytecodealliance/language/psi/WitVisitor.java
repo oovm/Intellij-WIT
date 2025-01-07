@@ -15,7 +15,7 @@ public class WitVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitAnnotationBody(@NotNull WitAnnotationBody o) {
+  public void visitAnnotationArguments(@NotNull WitAnnotationArguments o) {
     visitPsiElement(o);
   }
 

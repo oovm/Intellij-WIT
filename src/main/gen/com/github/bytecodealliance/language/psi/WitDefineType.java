@@ -7,6 +7,9 @@ import com.intellij.psi.PsiElement;
 
 public interface WitDefineType extends PsiElement {
 
+  @NotNull
+  WitAnnotations getAnnotations();
+
   @Nullable
   WitIdentifier getIdentifier();
 

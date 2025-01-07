@@ -49,7 +49,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AT identifier annotation-body?
+  // AT identifier (PARENTHESIS_L annotation-arguments PARENTHESIS_R)?
   public static boolean annotation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation")) return false;
     if (!nextTokenIs(b, AT)) return false;
@@ -63,32 +63,42 @@ public class WitParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // annotation-body?
+  // (PARENTHESIS_L annotation-arguments PARENTHESIS_R)?
   private static boolean annotation_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation_2")) return false;
-    annotation_body(b, l + 1);
+    annotation_2_0(b, l + 1);
     return true;
   }
 
-  /* ********************************************************** */
-  // PARENTHESIS_L identifier EQ (VERSION|identifier) PARENTHESIS_R
-  public static boolean annotation_body(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_body")) return false;
-    if (!nextTokenIs(b, PARENTHESIS_L)) return false;
+  // PARENTHESIS_L annotation-arguments PARENTHESIS_R
+  private static boolean annotation_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, PARENTHESIS_L);
-    r = r && identifier(b, l + 1);
-    r = r && consumeToken(b, EQ);
-    r = r && annotation_body_3(b, l + 1);
+    r = r && annotation_arguments(b, l + 1);
     r = r && consumeToken(b, PARENTHESIS_R);
-    exit_section_(b, m, ANNOTATION_BODY, r);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // identifier EQ (VERSION|identifier)
+  public static boolean annotation_arguments(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_arguments")) return false;
+    if (!nextTokenIs(b, "<annotation arguments>", ESCAPED, SYMBOL)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, ANNOTATION_ARGUMENTS, "<annotation arguments>");
+    r = identifier(b, l + 1);
+    r = r && consumeToken(b, EQ);
+    r = r && annotation_arguments_2(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // VERSION|identifier
-  private static boolean annotation_body_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_body_3")) return false;
+  private static boolean annotation_arguments_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_arguments_2")) return false;
     boolean r;
     r = consumeToken(b, VERSION);
     if (!r) r = identifier(b, l + 1);
@@ -159,14 +169,15 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // KW_TYPE identifier EQ type-hint
+  // annotations KW_TYPE identifier EQ type-hint
   public static boolean define_type(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "define_type")) return false;
-    if (!nextTokenIs(b, KW_TYPE)) return false;
+    if (!nextTokenIs(b, "<define type>", AT, KW_TYPE)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, DEFINE_TYPE, null);
-    r = consumeToken(b, KW_TYPE);
-    p = r; // pin = 1
+    Marker m = enter_section_(b, l, _NONE_, DEFINE_TYPE, "<define type>");
+    r = annotations(b, l + 1);
+    r = r && consumeToken(b, KW_TYPE);
+    p = r; // pin = 2
     r = r && report_error_(b, identifier(b, l + 1));
     r = p && report_error_(b, consumeToken(b, EQ)) && r;
     r = p && type_hint(b, l + 1) && r;
@@ -631,13 +642,13 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier COLON function-signature
+  // annotations identifier COLON function-signature
   public static boolean method(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "method")) return false;
-    if (!nextTokenIs(b, "<method>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, METHOD, "<method>");
-    r = identifier(b, l + 1);
+    r = annotations(b, l + 1);
+    r = r && identifier(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && function_signature(b, l + 1);
     exit_section_(b, l, m, r, false, null);

@@ -29,8 +29,8 @@ public class WitAnnotationNode extends WitElement implements WitAnnotation {
 
   @Override
   @Nullable
-  public WitAnnotationBody getAnnotationBody() {
-    return findChildByClass(WitAnnotationBody.class);
+  public WitAnnotationArguments getAnnotationArguments() {
+    return findChildByClass(WitAnnotationArguments.class);
   }
 
   @Override

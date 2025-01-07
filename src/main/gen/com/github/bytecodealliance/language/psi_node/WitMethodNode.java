@@ -29,6 +29,12 @@ public class WitMethodNode extends MixinMethod implements WitMethod {
 
   @Override
   @NotNull
+  public WitAnnotations getAnnotations() {
+    return findNotNullChildByClass(WitAnnotations.class);
+  }
+
+  @Override
+  @NotNull
   public WitFunctionSignature getFunctionSignature() {
     return findNotNullChildByClass(WitFunctionSignature.class);
   }

@@ -160,11 +160,11 @@ private interface-element ::= SEMICOLON
 	| variant
 	| function
 // get-insecure-random-bytes: func(len: u64) -> list<u8>;
-method ::= identifier COLON function-signature {
+method ::= annotations identifier COLON function-signature {
 	mixin = "com.github.bytecodealliance.language.mixin.MixinMethod"
 }
-constructor ::= KW_CONSTRUCTOR tuple (TO type-hint)? {
-	pin = 1
+constructor ::= annotations KW_CONSTRUCTOR tuple (TO type-hint)? {
+	pin = 2
 }
 function ::= annotations identifier COLON function-signature {
 	mixin = "com.github.bytecodealliance.language.mixin.MixinFunction"
@@ -175,15 +175,13 @@ function-signature ::= modifier? KW_FUNCTION tuple (TO type-hint)? {
 // =====================================================================================================
 // @since(version = 0.2.0)
 annotations ::= annotation*;
-annotation ::= AT identifier annotation-body? {
+annotation ::= AT identifier (PARENTHESIS_L annotation-arguments PARENTHESIS_R)? {
 	pin = 2
 }
-annotation-body ::= PARENTHESIS_L identifier EQ (VERSION|identifier) PARENTHESIS_R
-
-
+annotation-arguments ::= identifier EQ (VERSION|identifier)
 // type type-name = type-hint;
-define-type ::= KW_TYPE identifier EQ type-hint {
-	pin = 1
+define-type ::= annotations KW_TYPE identifier EQ type-hint {
+	pin = 2
 }
 type-hint ::= tuple | type-generic;
 type-generic ::= identifier generic?;
