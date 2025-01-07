@@ -175,7 +175,7 @@ function-signature ::= modifier? KW_FUNCTION tuple (TO type-hint)? {
 // =====================================================================================================
 // @since(version = 0.2.0)
 annotations ::= annotation*;
-annotation ::= AT identifier (PARENTHESIS_L annotation-arguments PARENTHESIS_R)? {
+annotation ::= AT identifier-free (PARENTHESIS_L annotation-arguments PARENTHESIS_R)? {
 	pin = 2
 }
 annotation-arguments ::= identifier EQ (VERSION|identifier)
@@ -240,3 +240,4 @@ interface-name      ::= SYMBOL | ESCAPED;
 alias-name          ::= SYMBOL | ESCAPED;
 semantic-number     ::= SYMBOL | ESCAPED;
 identifier          ::= SYMBOL | ESCAPED;
+identifier-free     ::= SYMBOL | ESCAPED;

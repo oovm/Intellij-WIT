@@ -28,6 +28,12 @@ public class WitConstructorNode extends WitElement implements WitConstructor {
   }
 
   @Override
+  @NotNull
+  public WitAnnotations getAnnotations() {
+    return findNotNullChildByClass(WitAnnotations.class);
+  }
+
+  @Override
   @Nullable
   public WitTuple getTuple() {
     return findChildByClass(WitTuple.class);

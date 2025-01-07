@@ -23,6 +23,7 @@ public interface WitTypes {
   IElementType FUNCTION_SIGNATURE = new WitElementType("FUNCTION_SIGNATURE");
   IElementType GENERIC = new WitElementType("GENERIC");
   IElementType IDENTIFIER = new WitElementType("IDENTIFIER");
+  IElementType IDENTIFIER_FREE = new WitElementType("IDENTIFIER_FREE");
   IElementType IMPORT = new WitElementType("IMPORT");
   IElementType INCLUDE = new WitElementType("INCLUDE");
   IElementType INCLUDE_NAME = new WitElementType("INCLUDE_NAME");
@@ -148,6 +149,9 @@ public interface WitTypes {
       }
       else if (type == IDENTIFIER) {
         return new WitIdentifierNode(node);
+      }
+      else if (type == IDENTIFIER_FREE) {
+        return new WitIdentifierFreeNode(node);
       }
       else if (type == IMPORT) {
         return new WitImportNode(node);

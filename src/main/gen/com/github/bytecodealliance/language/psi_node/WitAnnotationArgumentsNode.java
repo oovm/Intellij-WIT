@@ -11,14 +11,14 @@ import static com.github.bytecodealliance.language.psi.WitTypes.*;
 import com.github.bytecodealliance.language.psi.WitElement;
 import com.github.bytecodealliance.language.psi.*;
 
-public class WitAnnotationNode extends WitElement implements WitAnnotation {
+public class WitAnnotationArgumentsNode extends WitElement implements WitAnnotationArguments {
 
-  public WitAnnotationNode(@NotNull ASTNode node) {
+  public WitAnnotationArgumentsNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull WitVisitor visitor) {
-    visitor.visitAnnotation(this);
+    visitor.visitAnnotationArguments(this);
   }
 
   @Override
@@ -28,15 +28,9 @@ public class WitAnnotationNode extends WitElement implements WitAnnotation {
   }
 
   @Override
-  @Nullable
-  public WitAnnotationArguments getAnnotationArguments() {
-    return findChildByClass(WitAnnotationArguments.class);
-  }
-
-  @Override
   @NotNull
-  public WitIdentifierFree getIdentifierFree() {
-    return findNotNullChildByClass(WitIdentifierFree.class);
+  public List<WitIdentifier> getIdentifierList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitIdentifier.class);
   }
 
 }

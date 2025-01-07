@@ -49,14 +49,14 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AT identifier (PARENTHESIS_L annotation-arguments PARENTHESIS_R)?
+  // AT identifier-free (PARENTHESIS_L annotation-arguments PARENTHESIS_R)?
   public static boolean annotation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation")) return false;
     if (!nextTokenIs(b, AT)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, ANNOTATION, null);
     r = consumeToken(b, AT);
-    r = r && identifier(b, l + 1);
+    r = r && identifier_free(b, l + 1);
     p = r; // pin = 2
     r = r && annotation_2(b, l + 1);
     exit_section_(b, l, m, r, p, null);
@@ -120,30 +120,31 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // KW_CONSTRUCTOR tuple (TO type-hint)?
+  // annotations KW_CONSTRUCTOR tuple (TO type-hint)?
   public static boolean constructor(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "constructor")) return false;
-    if (!nextTokenIs(b, KW_CONSTRUCTOR)) return false;
+    if (!nextTokenIs(b, "<constructor>", AT, KW_CONSTRUCTOR)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, CONSTRUCTOR, null);
-    r = consumeToken(b, KW_CONSTRUCTOR);
-    p = r; // pin = 1
+    Marker m = enter_section_(b, l, _NONE_, CONSTRUCTOR, "<constructor>");
+    r = annotations(b, l + 1);
+    r = r && consumeToken(b, KW_CONSTRUCTOR);
+    p = r; // pin = 2
     r = r && report_error_(b, tuple(b, l + 1));
-    r = p && constructor_2(b, l + 1) && r;
+    r = p && constructor_3(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
   // (TO type-hint)?
-  private static boolean constructor_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "constructor_2")) return false;
-    constructor_2_0(b, l + 1);
+  private static boolean constructor_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "constructor_3")) return false;
+    constructor_3_0(b, l + 1);
     return true;
   }
 
   // TO type-hint
-  private static boolean constructor_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "constructor_2_0")) return false;
+  private static boolean constructor_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "constructor_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, TO);
@@ -471,6 +472,19 @@ public class WitParser implements PsiParser, LightPsiParser {
     if (!nextTokenIs(b, "<identifier>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, IDENTIFIER, "<identifier>");
+    r = consumeToken(b, SYMBOL);
+    if (!r) r = consumeToken(b, ESCAPED);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // SYMBOL | ESCAPED
+  public static boolean identifier_free(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "identifier_free")) return false;
+    if (!nextTokenIs(b, "<identifier free>", ESCAPED, SYMBOL)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, IDENTIFIER_FREE, "<identifier free>");
     r = consumeToken(b, SYMBOL);
     if (!r) r = consumeToken(b, ESCAPED);
     exit_section_(b, l, m, r, false, null);

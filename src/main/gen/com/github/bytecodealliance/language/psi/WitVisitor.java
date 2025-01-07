@@ -67,6 +67,10 @@ public class WitVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitIdentifierFree(@NotNull WitIdentifierFree o) {
+    visitPsiElement(o);
+  }
+
   public void visitImport(@NotNull WitImport o) {
     visitPsiElement(o);
   }
