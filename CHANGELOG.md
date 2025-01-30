@@ -2,6 +2,14 @@
 
 # Wit-Intellij Changelog
 
+## [0.1.3]
+### Added
+- Support mark `getter` function
+- Support mark `setter` function
+### Fix
+- Fix `world` indent level
+- Fix indent level with annotations
+
 ## [0.1.2]
 ### Added
 - Support `@since` annotation
@@ -9,7 +17,6 @@
 - Support mark `setter` function
 ### Fix
 - Remove `Nested namespace dost not support yet` hint
-- Fix `world` indent level
 
 ## [0.1.1]
 ### Fix

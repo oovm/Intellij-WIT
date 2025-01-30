@@ -28,14 +28,14 @@ class WitFormatBuilder : FormattingModelBuilder {
 
         fun computeIndent(parent: ASTNode, child: ASTNode): Indent? {
             return when (parent.psi) {
-                is WitWorld -> parent.indentInRange(child, 2, 1)
-                is WitInterfaceBody -> parent.indentInRange(child, 1, 1)
+                is WitWorldBody -> byCorner(parent, child)
+                is WitInterfaceBody -> byCorner(parent, child)
                 is WitUseItems -> parent.indentInRange(child, 2, 1)
-                is WitResource -> parent.indentInRange(child, 1, 1)
-                is WitRecord -> parent.indentInRange(child, 1, 1)
-                is WitFlags -> parent.indentInRange(child, 1, 1)
-                is WitEnum -> parent.indentInRange(child, 1, 1)
-                is WitVariant -> parent.indentInRange(child, 1, 1)
+                is WitResourceBody -> byCorner(parent, child)
+                is WitRecordBody -> byCorner(parent, child)
+                is WitFlagsBody -> byCorner(parent, child)
+                is WitEnumBody -> byCorner(parent, child)
+                is WitVariantBody -> byCorner(parent, child)
                 is WitFunctionSignature -> parent.indentInRange(child, 1, 1)
                 is WitTuple -> parent.indentInRange(child, 1, 1)
                 is WitGeneric -> parent.indentInRange(child, 1, 1)
@@ -44,6 +44,13 @@ class WitFormatBuilder : FormattingModelBuilder {
             }
         }
 
+        private fun byCorner(parent: ASTNode, child: ASTNode): Indent {
+            val isCorner = parent.firstChildNode == child || parent.lastChildNode == child
+            return when {
+                isCorner -> Indent.getNoneIndent()
+                else -> Indent.getNormalIndent()
+            }
+        }
         private fun ASTNode.indentInRange(child: ASTNode, head: Int, tail: Int): Indent {
             val children = this.getChildren(null);
             val index = children.indexOf(child)

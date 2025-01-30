@@ -17,7 +17,7 @@ abstract class MixinVariant(node: ASTNode) : WitElement(node),
     }
 
     override fun getNameIdentifier(): PsiElement? {
-        return this.identifierSafe
+        return this.identifierFree
     }
 
 
