@@ -53,8 +53,8 @@ public class WitWorldNode extends MixinWorld implements WitWorld {
 
   @Override
   @Nullable
-  public WitIdentifier getIdentifier() {
-    return findChildByClass(WitIdentifier.class);
+  public WitIdentifierSafe getIdentifierSafe() {
+    return findChildByClass(WitIdentifierSafe.class);
   }
 
   @Override

@@ -90,7 +90,7 @@ package ::= KW_PACKAGE package-name {
 package-name ::= module-name (COLON module-name)* package-version?;
 package-version ::= AT VERSION;
 // world name { }
-world ::= annotations KW_WORLD identifier BRACE_L world-element* BRACE_R {
+world ::= annotations KW_WORLD identifier-safe BRACE_L world-element* BRACE_R {
 	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
 }
@@ -111,7 +111,7 @@ include ::= annotations KW_INCLUDE include-name {
     mixin = "com.github.bytecodealliance.language.mixin.MixinInclude"
 }
 include-name ::=
-    identifier (COLON identifier) (SLASH interface-name) package-version?
+    identifier-safe (COLON identifier-safe) (SLASH interface-name) package-version?
   | interface-name
 // import imports;
 // import error-code: func(err: u32) -> option<u32>;
@@ -134,7 +134,7 @@ use      ::= annotations KW_USE include-name use-items? {
 use-items ::= DOT BRACE_L (use-alias (COMMA use-alias)* COMMA?)? BRACE_R {
 	pin = 1
 }
-use-alias ::= identifier (KW_AS alias-name)? {
+use-alias ::= identifier-safe (KW_AS alias-name)? {
 
 }
 
@@ -160,13 +160,13 @@ private interface-element ::= SEMICOLON
 	| variant
 	| function
 // get-insecure-random-bytes: func(len: u64) -> list<u8>;
-method ::= annotations identifier COLON function-signature {
+method ::= annotations identifier-safe COLON function-signature {
 	mixin = "com.github.bytecodealliance.language.mixin.MixinMethod"
 }
 constructor ::= annotations KW_CONSTRUCTOR tuple (TO type-hint)? {
 	pin = 2
 }
-function ::= annotations identifier COLON function-signature {
+function ::= annotations identifier-safe COLON function-signature {
 	mixin = "com.github.bytecodealliance.language.mixin.MixinFunction"
 }
 function-signature ::= modifier? KW_FUNCTION tuple (TO type-hint)? {
@@ -179,22 +179,22 @@ annotation ::= AT identifier-free annotation-body? {
 	pin = 1
 }
 annotation-body ::= PARENTHESIS_L (annotation-pair (COMMA annotation-pair)* COMMA?)? PARENTHESIS_R
-annotation-pair ::= identifier EQ annotation-value
+annotation-pair ::= identifier-safe EQ annotation-value
 annotation-value ::= VERSION
-	| identifier
+	| identifier-safe
 // type type-name = type-hint;
-define-type ::= annotations KW_TYPE identifier EQ type-hint {
+define-type ::= annotations KW_TYPE identifier-safe EQ type-hint {
 	pin = 2
 }
 type-hint ::= tuple | type-generic;
-type-generic ::= identifier generic?;
+type-generic ::= identifier-safe generic?;
 tuple ::= PARENTHESIS_L (parameter (COMMA parameter)* COMMA?)? PARENTHESIS_R;
-parameter ::= identifier COLON type-hint {
+parameter ::= identifier-safe COLON type-hint {
 
 }
 generic   ::= ANGLE_L (type-hint (COMMA type-hint)* COMMA?)? ANGLE_R;
 // resource type-name { method: func() };
-resource  ::= annotations KW_RESOURCE identifier (BRACE_L resource-element* BRACE_R)? {
+resource  ::= annotations KW_RESOURCE identifier-safe (BRACE_L resource-element* BRACE_R)? {
 	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinResource"
 }
@@ -203,7 +203,7 @@ private resource-element ::=
   | constructor
   | SEMICOLON
 // record type-name { field: type-hint, key: value };
-record   ::= annotations KW_RECORD identifier BRACE_L record-element* BRACE_R {
+record   ::= annotations KW_RECORD identifier-safe BRACE_L record-element* BRACE_R {
 	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinRecord"
 }
@@ -211,25 +211,25 @@ private record-element ::=
     record-field
   | COMMA
 
-record-field    ::= identifier COLON type-hint {
+record-field    ::= identifier-safe COLON type-hint {
     mixin = "com.github.bytecodealliance.language.mixin.MixinField"
 }
 
 
-flags       ::= annotations KW_FLAGS identifier BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R {
+flags       ::= annotations KW_FLAGS identifier-safe BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R {
 	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinFlags"
 }
-enum       ::= annotations KW_ENUM identifier BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R {
+enum       ::= annotations KW_ENUM identifier-safe BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R {
 	pin = 2
 }
 
 
-variant          ::= annotations KW_VARIANT identifier BRACE_L (variant-item (COMMA variant-item)* COMMA?)? BRACE_R {
+variant          ::= annotations KW_VARIANT identifier-safe BRACE_L (variant-item (COMMA variant-item)* COMMA?)? BRACE_R {
 	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinVariant"
 }
-variant-item 	 ::= identifier (PARENTHESIS_L type-hint PARENTHESIS_R)? {
+variant-item 	 ::= identifier-safe (PARENTHESIS_L type-hint PARENTHESIS_R)? {
     mixin = "com.github.bytecodealliance.language.mixin.MixinVariantItem"
 }
 
@@ -242,5 +242,5 @@ module-name         ::= SYMBOL | ESCAPED;
 interface-name      ::= SYMBOL | ESCAPED;
 alias-name          ::= SYMBOL | ESCAPED;
 semantic-number     ::= SYMBOL | ESCAPED;
-identifier          ::= SYMBOL | ESCAPED;
+identifier-safe     ::= SYMBOL | ESCAPED;
 identifier-free     ::= SYMBOL | ESCAPED;

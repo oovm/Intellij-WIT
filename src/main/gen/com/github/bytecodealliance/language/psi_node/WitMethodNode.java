@@ -41,8 +41,8 @@ public class WitMethodNode extends MixinMethod implements WitMethod {
 
   @Override
   @NotNull
-  public WitIdentifier getIdentifier() {
-    return findNotNullChildByClass(WitIdentifier.class);
+  public WitIdentifierSafe getIdentifierSafe() {
+    return findNotNullChildByClass(WitIdentifierSafe.class);
   }
 
 }

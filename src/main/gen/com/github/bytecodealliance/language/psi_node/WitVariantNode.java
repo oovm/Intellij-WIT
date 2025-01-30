@@ -35,8 +35,8 @@ public class WitVariantNode extends MixinVariant implements WitVariant {
 
   @Override
   @Nullable
-  public WitIdentifier getIdentifier() {
-    return findChildByClass(WitIdentifier.class);
+  public WitIdentifierSafe getIdentifierSafe() {
+    return findChildByClass(WitIdentifierSafe.class);
   }
 
   @Override

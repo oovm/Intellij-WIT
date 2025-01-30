@@ -29,8 +29,8 @@ public class WitAnnotationValueNode extends WitElement implements WitAnnotationV
 
   @Override
   @Nullable
-  public WitIdentifier getIdentifier() {
-    return findChildByClass(WitIdentifier.class);
+  public WitIdentifierSafe getIdentifierSafe() {
+    return findChildByClass(WitIdentifierSafe.class);
   }
 
 }

@@ -20,7 +20,7 @@ abstract class MixinWorld(node: ASTNode) : WitElement(node),
     }
 
     override fun getNameIdentifier(): PsiElement? {
-        return this.identifier
+        return this.identifierSafe
     }
 
     override fun getPresentation(): ItemPresentation? {

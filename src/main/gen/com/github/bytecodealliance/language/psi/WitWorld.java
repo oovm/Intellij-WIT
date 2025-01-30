@@ -20,7 +20,7 @@ public interface WitWorld extends PsiElement {
   List<WitExport> getExportList();
 
   @Nullable
-  WitIdentifier getIdentifier();
+  WitIdentifierSafe getIdentifierSafe();
 
   @NotNull
   List<WitImport> getImportList();

@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface WitVariantItem extends PsiElement {
 
   @NotNull
-  WitIdentifier getIdentifier();
+  WitIdentifierSafe getIdentifierSafe();
 
   @Nullable
   WitTypeHint getTypeHint();

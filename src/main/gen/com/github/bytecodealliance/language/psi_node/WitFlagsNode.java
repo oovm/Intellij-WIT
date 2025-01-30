@@ -35,8 +35,8 @@ public class WitFlagsNode extends MixinFlags implements WitFlags {
 
   @Override
   @Nullable
-  public WitIdentifier getIdentifier() {
-    return findChildByClass(WitIdentifier.class);
+  public WitIdentifierSafe getIdentifierSafe() {
+    return findChildByClass(WitIdentifierSafe.class);
   }
 
   @Override

@@ -11,6 +11,6 @@ public interface WitAnnotationPair extends PsiElement {
   WitAnnotationValue getAnnotationValue();
 
   @NotNull
-  WitIdentifier getIdentifier();
+  WitIdentifierSafe getIdentifierSafe();
 
 }

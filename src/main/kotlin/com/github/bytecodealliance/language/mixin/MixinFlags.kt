@@ -18,7 +18,7 @@ abstract class MixinFlags(node: ASTNode) : WitElement(node),
     }
 
     override fun getNameIdentifier(): PsiElement? {
-        return this.identifier
+        return this.identifierSafe
     }
 
 

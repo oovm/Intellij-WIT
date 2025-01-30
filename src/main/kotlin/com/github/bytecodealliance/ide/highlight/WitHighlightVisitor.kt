@@ -16,7 +16,7 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
 
 
     override fun visitUseAlias(o: WitUseAlias) {
-        highlight(o.identifier, SYM_TYPE)
+        highlight(o.identifierSafe, SYM_TYPE)
         o.aliasName?.let { highlight(it, SYM_TYPE) }
     }
 
@@ -26,24 +26,24 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
     }
 
     override fun visitResource(o: WitResource) {
-        o.identifier?.let { highlight(it, SYM_TYPE) }
+        o.identifierSafe?.let { highlight(it, SYM_TYPE) }
     }
 
 
     override fun visitRecord(o: WitRecord) {
-        o.identifier?.let { highlight(it, SYM_TYPE) }
+        o.identifierSafe?.let { highlight(it, SYM_TYPE) }
     }
 
     override fun visitRecordField(o: WitRecordField) {
-        highlight(o.identifier, SYM_FIELD)
+        highlight(o.identifierSafe, SYM_FIELD)
     }
 
     override fun visitEnum(o: WitEnum) {
-        o.identifier?.let { highlight(it, NUMBER) }
+        o.identifierSafe?.let { highlight(it, NUMBER) }
     }
 
     override fun visitFlags(o: WitFlags) {
-        o.identifier?.let { highlight(it, NUMBER) }
+        o.identifierSafe?.let { highlight(it, NUMBER) }
     }
 
     override fun visitSemanticNumber(o: WitSemanticNumber) {
@@ -51,19 +51,19 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
     }
 
     override fun visitVariant(o: WitVariant) {
-        o.identifier?.let { highlight(it, SYM_TYPE) }
+        o.identifierSafe?.let { highlight(it, SYM_TYPE) }
     }
 
     override fun visitVariantItem(o: WitVariantItem) {
-        highlight(o.identifier, SYM_FIELD)
+        highlight(o.identifierSafe, SYM_FIELD)
     }
 
     override fun visitFunction(o: WitFunction) {
-        highlight(o.identifier, SYM_FUNCTION)
+        highlight(o.identifierSafe, SYM_FUNCTION)
     }
 
     override fun visitMethod(o: WitMethod) {
-        highlight(o.identifier, SYM_FUNCTION)
+        highlight(o.identifierSafe, SYM_FUNCTION)
     }
 
     override fun visitAnnotation(o: WitAnnotation) {
@@ -71,7 +71,7 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
     }
 
     override fun visitAnnotationPair(o: WitAnnotationPair) {
-        highlight(o.identifier, SYM_FIELD)
+        highlight(o.identifierSafe, SYM_FIELD)
     }
 
     override fun visitModifier(o: WitModifier) {
@@ -79,34 +79,34 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
     }
 
     override fun visitParameter(o: WitParameter) {
-        highlight(o.identifier, SYM_FIELD)
+        highlight(o.identifierSafe, SYM_FIELD)
     }
 
 
     override fun visitDefineType(o: WitDefineType) {
-        o.identifier?.let { highlight(it, SYM_TYPE) }
+        o.identifierSafe?.let { highlight(it, SYM_TYPE) }
     }
 
     override fun visitTypeGeneric(o: WitTypeGeneric) {
-        when (o.identifier.text) {
+        when (o.identifierSafe.text) {
             "_", "bool", "char",
             "u8", "u16", "u32", "u64",
             "s8", "s16", "s32", "s64",
             "f32", "f64", "float32", "float64",
             "string"
                 -> {
-                highlight(o.identifier, KEYWORD)
+                highlight(o.identifierSafe, KEYWORD)
             }
 
             "list", "tuple",
             "option", "result",
             "borrow", "own",
                 -> {
-                highlight(o.identifier, SYM_BUILTIN)
+                highlight(o.identifierSafe, SYM_BUILTIN)
             }
 
             else -> {
-                highlight(o.identifier, SYM_TYPE)
+                highlight(o.identifierSafe, SYM_TYPE)
             }
         }
     }
@@ -127,7 +127,8 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
 //    }
 
 
-    private fun highlight(element: PsiElement, color: WitColor) {
+    private fun highlight(element: PsiElement?, color: WitColor) {
+        if (element == null) return
         val builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION)
         builder.textAttributes(color.textAttributesKey)
         builder.range(element)

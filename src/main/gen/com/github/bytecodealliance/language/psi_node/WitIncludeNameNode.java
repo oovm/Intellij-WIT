@@ -29,8 +29,8 @@ public class WitIncludeNameNode extends WitElement implements WitIncludeName {
 
   @Override
   @NotNull
-  public List<WitIdentifier> getIdentifierList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitIdentifier.class);
+  public List<WitIdentifierSafe> getIdentifierSafeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitIdentifierSafe.class);
   }
 
   @Override

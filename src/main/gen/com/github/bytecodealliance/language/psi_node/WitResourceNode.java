@@ -41,8 +41,8 @@ public class WitResourceNode extends MixinResource implements WitResource {
 
   @Override
   @Nullable
-  public WitIdentifier getIdentifier() {
-    return findChildByClass(WitIdentifier.class);
+  public WitIdentifierSafe getIdentifierSafe() {
+    return findChildByClass(WitIdentifierSafe.class);
   }
 
   @Override

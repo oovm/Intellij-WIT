@@ -71,11 +71,11 @@ public class WitVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitIdentifier(@NotNull WitIdentifier o) {
+  public void visitIdentifierFree(@NotNull WitIdentifierFree o) {
     visitPsiElement(o);
   }
 
-  public void visitIdentifierFree(@NotNull WitIdentifierFree o) {
+  public void visitIdentifierSafe(@NotNull WitIdentifierSafe o) {
     visitPsiElement(o);
   }
 

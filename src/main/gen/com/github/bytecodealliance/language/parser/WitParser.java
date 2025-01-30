@@ -133,13 +133,13 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier EQ annotation-value
+  // identifier-safe EQ annotation-value
   public static boolean annotation_pair(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation_pair")) return false;
     if (!nextTokenIs(b, "<annotation pair>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ANNOTATION_PAIR, "<annotation pair>");
-    r = identifier(b, l + 1);
+    r = identifier_safe(b, l + 1);
     r = r && consumeToken(b, EQ);
     r = r && annotation_value(b, l + 1);
     exit_section_(b, l, m, r, false, null);
@@ -148,13 +148,13 @@ public class WitParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // VERSION
-  // 	| identifier
+  // 	| identifier-safe
   public static boolean annotation_value(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation_value")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ANNOTATION_VALUE, "<annotation value>");
     r = consumeToken(b, VERSION);
-    if (!r) r = identifier(b, l + 1);
+    if (!r) r = identifier_safe(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -224,7 +224,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_TYPE identifier EQ type-hint
+  // annotations KW_TYPE identifier-safe EQ type-hint
   public static boolean define_type(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "define_type")) return false;
     if (!nextTokenIs(b, "<define type>", AT, KW_TYPE)) return false;
@@ -233,7 +233,7 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_TYPE);
     p = r; // pin = 2
-    r = r && report_error_(b, identifier(b, l + 1));
+    r = r && report_error_(b, identifier_safe(b, l + 1));
     r = p && report_error_(b, consumeToken(b, EQ)) && r;
     r = p && type_hint(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
@@ -241,7 +241,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_ENUM identifier BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R
+  // annotations KW_ENUM identifier-safe BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R
   public static boolean enum_$(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "enum_$")) return false;
     if (!nextTokenIs(b, "<enum $>", AT, KW_ENUM)) return false;
@@ -250,7 +250,7 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_ENUM);
     p = r; // pin = 2
-    r = r && report_error_(b, identifier(b, l + 1));
+    r = r && report_error_(b, identifier_safe(b, l + 1));
     r = p && report_error_(b, consumeToken(b, BRACE_L)) && r;
     r = p && report_error_(b, enum_4(b, l + 1)) && r;
     r = p && consumeToken(b, BRACE_R) && r;
@@ -337,7 +337,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_FLAGS identifier BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R
+  // annotations KW_FLAGS identifier-safe BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R
   public static boolean flags(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "flags")) return false;
     if (!nextTokenIs(b, "<flags>", AT, KW_FLAGS)) return false;
@@ -346,7 +346,7 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_FLAGS);
     p = r; // pin = 2
-    r = r && report_error_(b, identifier(b, l + 1));
+    r = r && report_error_(b, identifier_safe(b, l + 1));
     r = p && report_error_(b, consumeToken(b, BRACE_L)) && r;
     r = p && report_error_(b, flags_4(b, l + 1)) && r;
     r = p && consumeToken(b, BRACE_R) && r;
@@ -403,13 +403,13 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations identifier COLON function-signature
+  // annotations identifier-safe COLON function-signature
   public static boolean function(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "function")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION, "<function>");
     r = annotations(b, l + 1);
-    r = r && identifier(b, l + 1);
+    r = r && identifier_safe(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && function_signature(b, l + 1);
     exit_section_(b, l, m, r, false, null);
@@ -521,11 +521,11 @@ public class WitParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // SYMBOL | ESCAPED
-  public static boolean identifier(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "identifier")) return false;
-    if (!nextTokenIs(b, "<identifier>", ESCAPED, SYMBOL)) return false;
+  public static boolean identifier_free(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "identifier_free")) return false;
+    if (!nextTokenIs(b, "<identifier free>", ESCAPED, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, IDENTIFIER, "<identifier>");
+    Marker m = enter_section_(b, l, _NONE_, IDENTIFIER_FREE, "<identifier free>");
     r = consumeToken(b, SYMBOL);
     if (!r) r = consumeToken(b, ESCAPED);
     exit_section_(b, l, m, r, false, null);
@@ -534,11 +534,11 @@ public class WitParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // SYMBOL | ESCAPED
-  public static boolean identifier_free(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "identifier_free")) return false;
-    if (!nextTokenIs(b, "<identifier free>", ESCAPED, SYMBOL)) return false;
+  public static boolean identifier_safe(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "identifier_safe")) return false;
+    if (!nextTokenIs(b, "<identifier safe>", ESCAPED, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, IDENTIFIER_FREE, "<identifier free>");
+    Marker m = enter_section_(b, l, _NONE_, IDENTIFIER_SAFE, "<identifier safe>");
     r = consumeToken(b, SYMBOL);
     if (!r) r = consumeToken(b, ESCAPED);
     exit_section_(b, l, m, r, false, null);
@@ -576,7 +576,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier (COLON identifier) (SLASH interface-name) package-version?
+  // identifier-safe (COLON identifier-safe) (SLASH interface-name) package-version?
   //   | interface-name
   public static boolean include_name(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "include_name")) return false;
@@ -589,12 +589,12 @@ public class WitParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // identifier (COLON identifier) (SLASH interface-name) package-version?
+  // identifier-safe (COLON identifier-safe) (SLASH interface-name) package-version?
   private static boolean include_name_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "include_name_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = identifier(b, l + 1);
+    r = identifier_safe(b, l + 1);
     r = r && include_name_0_1(b, l + 1);
     r = r && include_name_0_2(b, l + 1);
     r = r && include_name_0_3(b, l + 1);
@@ -602,13 +602,13 @@ public class WitParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // COLON identifier
+  // COLON identifier-safe
   private static boolean include_name_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "include_name_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COLON);
-    r = r && identifier(b, l + 1);
+    r = r && identifier_safe(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -710,13 +710,13 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations identifier COLON function-signature
+  // annotations identifier-safe COLON function-signature
   public static boolean method(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "method")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, METHOD, "<method>");
     r = annotations(b, l + 1);
-    r = r && identifier(b, l + 1);
+    r = r && identifier_safe(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && function_signature(b, l + 1);
     exit_section_(b, l, m, r, false, null);
@@ -818,14 +818,14 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier COLON type-hint {
+  // identifier-safe COLON type-hint {
   // }
   public static boolean parameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "parameter")) return false;
     if (!nextTokenIs(b, "<parameter>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, PARAMETER, "<parameter>");
-    r = identifier(b, l + 1);
+    r = identifier_safe(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && type_hint(b, l + 1);
     r = r && parameter_3(b, l + 1);
@@ -840,7 +840,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_RECORD identifier BRACE_L record-element* BRACE_R
+  // annotations KW_RECORD identifier-safe BRACE_L record-element* BRACE_R
   public static boolean record(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "record")) return false;
     if (!nextTokenIs(b, "<record>", AT, KW_RECORD)) return false;
@@ -849,7 +849,7 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_RECORD);
     p = r; // pin = 2
-    r = r && report_error_(b, identifier(b, l + 1));
+    r = r && report_error_(b, identifier_safe(b, l + 1));
     r = p && report_error_(b, consumeToken(b, BRACE_L)) && r;
     r = p && report_error_(b, record_4(b, l + 1)) && r;
     r = p && consumeToken(b, BRACE_R) && r;
@@ -880,13 +880,13 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier COLON type-hint
+  // identifier-safe COLON type-hint
   public static boolean record_field(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "record_field")) return false;
     if (!nextTokenIs(b, "<record field>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, RECORD_FIELD, "<record field>");
-    r = identifier(b, l + 1);
+    r = identifier_safe(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && type_hint(b, l + 1);
     exit_section_(b, l, m, r, false, null);
@@ -894,7 +894,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_RESOURCE identifier (BRACE_L resource-element* BRACE_R)?
+  // annotations KW_RESOURCE identifier-safe (BRACE_L resource-element* BRACE_R)?
   public static boolean resource(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "resource")) return false;
     if (!nextTokenIs(b, "<resource>", AT, KW_RESOURCE)) return false;
@@ -903,7 +903,7 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_RESOURCE);
     p = r; // pin = 2
-    r = r && report_error_(b, identifier(b, l + 1));
+    r = r && report_error_(b, identifier_safe(b, l + 1));
     r = p && resource_3(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -1045,13 +1045,13 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier generic?
+  // identifier-safe generic?
   public static boolean type_generic(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "type_generic")) return false;
     if (!nextTokenIs(b, "<type generic>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, TYPE_GENERIC, "<type generic>");
-    r = identifier(b, l + 1);
+    r = identifier_safe(b, l + 1);
     r = r && type_generic_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -1100,14 +1100,14 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier (KW_AS alias-name)? {
+  // identifier-safe (KW_AS alias-name)? {
   // }
   public static boolean use_alias(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "use_alias")) return false;
     if (!nextTokenIs(b, "<use alias>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, USE_ALIAS, "<use alias>");
-    r = identifier(b, l + 1);
+    r = identifier_safe(b, l + 1);
     r = r && use_alias_1(b, l + 1);
     r = r && use_alias_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
@@ -1202,7 +1202,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_VARIANT identifier BRACE_L (variant-item (COMMA variant-item)* COMMA?)? BRACE_R
+  // annotations KW_VARIANT identifier-safe BRACE_L (variant-item (COMMA variant-item)* COMMA?)? BRACE_R
   public static boolean variant(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "variant")) return false;
     if (!nextTokenIs(b, "<variant>", AT, KW_VARIANT)) return false;
@@ -1211,7 +1211,7 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_VARIANT);
     p = r; // pin = 2
-    r = r && report_error_(b, identifier(b, l + 1));
+    r = r && report_error_(b, identifier_safe(b, l + 1));
     r = p && report_error_(b, consumeToken(b, BRACE_L)) && r;
     r = p && report_error_(b, variant_4(b, l + 1)) && r;
     r = p && consumeToken(b, BRACE_R) && r;
@@ -1268,13 +1268,13 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier (PARENTHESIS_L type-hint PARENTHESIS_R)?
+  // identifier-safe (PARENTHESIS_L type-hint PARENTHESIS_R)?
   public static boolean variant_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "variant_item")) return false;
     if (!nextTokenIs(b, "<variant item>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, VARIANT_ITEM, "<variant item>");
-    r = identifier(b, l + 1);
+    r = identifier_safe(b, l + 1);
     r = r && variant_item_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -1312,7 +1312,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_WORLD identifier BRACE_L world-element* BRACE_R
+  // annotations KW_WORLD identifier-safe BRACE_L world-element* BRACE_R
   public static boolean world(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "world")) return false;
     if (!nextTokenIs(b, "<world>", AT, KW_WORLD)) return false;
@@ -1321,7 +1321,7 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_WORLD);
     p = r; // pin = 2
-    r = r && report_error_(b, identifier(b, l + 1));
+    r = r && report_error_(b, identifier_safe(b, l + 1));
     r = p && report_error_(b, consumeToken(b, BRACE_L)) && r;
     r = p && report_error_(b, world_4(b, l + 1)) && r;
     r = p && consumeToken(b, BRACE_R) && r;

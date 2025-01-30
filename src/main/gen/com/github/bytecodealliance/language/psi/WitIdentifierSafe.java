@@ -5,15 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface WitVariant extends PsiElement {
-
-  @NotNull
-  WitAnnotations getAnnotations();
-
-  @Nullable
-  WitIdentifierSafe getIdentifierSafe();
-
-  @NotNull
-  List<WitVariantItem> getVariantItemList();
+public interface WitIdentifierSafe extends PsiElement {
 
 }

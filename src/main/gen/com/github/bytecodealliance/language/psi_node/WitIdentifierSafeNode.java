@@ -11,32 +11,20 @@ import static com.github.bytecodealliance.language.psi.WitTypes.*;
 import com.github.bytecodealliance.language.psi.WitElement;
 import com.github.bytecodealliance.language.psi.*;
 
-public class WitAnnotationPairNode extends WitElement implements WitAnnotationPair {
+public class WitIdentifierSafeNode extends WitElement implements WitIdentifierSafe {
 
-  public WitAnnotationPairNode(@NotNull ASTNode node) {
+  public WitIdentifierSafeNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull WitVisitor visitor) {
-    visitor.visitAnnotationPair(this);
+    visitor.visitIdentifierSafe(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof WitVisitor) accept((WitVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public WitAnnotationValue getAnnotationValue() {
-    return findNotNullChildByClass(WitAnnotationValue.class);
-  }
-
-  @Override
-  @NotNull
-  public WitIdentifierSafe getIdentifierSafe() {
-    return findNotNullChildByClass(WitIdentifierSafe.class);
   }
 
 }

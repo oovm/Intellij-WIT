@@ -14,6 +14,6 @@ public interface WitFunction extends PsiElement {
   WitFunctionSignature getFunctionSignature();
 
   @NotNull
-  WitIdentifier getIdentifier();
+  WitIdentifierSafe getIdentifierSafe();
 
 }

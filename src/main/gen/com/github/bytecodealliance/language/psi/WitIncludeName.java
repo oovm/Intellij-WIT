@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface WitIncludeName extends PsiElement {
 
   @NotNull
-  List<WitIdentifier> getIdentifierList();
+  List<WitIdentifierSafe> getIdentifierSafeList();
 
   @NotNull
   WitInterfaceName getInterfaceName();

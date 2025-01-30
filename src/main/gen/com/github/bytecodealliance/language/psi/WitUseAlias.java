@@ -11,6 +11,6 @@ public interface WitUseAlias extends PsiElement {
   WitAliasName getAliasName();
 
   @NotNull
-  WitIdentifier getIdentifier();
+  WitIdentifierSafe getIdentifierSafe();
 
 }

@@ -29,8 +29,8 @@ public class WitParameterNode extends WitElement implements WitParameter {
 
   @Override
   @NotNull
-  public WitIdentifier getIdentifier() {
-    return findNotNullChildByClass(WitIdentifier.class);
+  public WitIdentifierSafe getIdentifierSafe() {
+    return findNotNullChildByClass(WitIdentifierSafe.class);
   }
 
   @Override

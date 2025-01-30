@@ -14,7 +14,7 @@ public interface WitResource extends PsiElement {
   List<WitConstructor> getConstructorList();
 
   @Nullable
-  WitIdentifier getIdentifier();
+  WitIdentifierSafe getIdentifierSafe();
 
   @NotNull
   List<WitMethod> getMethodList();

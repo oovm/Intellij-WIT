@@ -35,8 +35,8 @@ public class WitUseAliasNode extends WitElement implements WitUseAlias {
 
   @Override
   @NotNull
-  public WitIdentifier getIdentifier() {
-    return findNotNullChildByClass(WitIdentifier.class);
+  public WitIdentifierSafe getIdentifierSafe() {
+    return findNotNullChildByClass(WitIdentifierSafe.class);
   }
 
 }

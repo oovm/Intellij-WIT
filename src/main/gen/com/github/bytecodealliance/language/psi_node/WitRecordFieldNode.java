@@ -29,8 +29,8 @@ public class WitRecordFieldNode extends MixinField implements WitRecordField {
 
   @Override
   @NotNull
-  public WitIdentifier getIdentifier() {
-    return findNotNullChildByClass(WitIdentifier.class);
+  public WitIdentifierSafe getIdentifierSafe() {
+    return findNotNullChildByClass(WitIdentifierSafe.class);
   }
 
   @Override

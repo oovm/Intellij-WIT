@@ -11,7 +11,7 @@ public interface WitDefineType extends PsiElement {
   WitAnnotations getAnnotations();
 
   @Nullable
-  WitIdentifier getIdentifier();
+  WitIdentifierSafe getIdentifierSafe();
 
   @Nullable
   WitTypeHint getTypeHint();

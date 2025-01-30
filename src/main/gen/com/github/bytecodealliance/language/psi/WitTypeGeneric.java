@@ -11,6 +11,6 @@ public interface WitTypeGeneric extends PsiElement {
   WitGeneric getGeneric();
 
   @NotNull
-  WitIdentifier getIdentifier();
+  WitIdentifierSafe getIdentifierSafe();
 
 }
