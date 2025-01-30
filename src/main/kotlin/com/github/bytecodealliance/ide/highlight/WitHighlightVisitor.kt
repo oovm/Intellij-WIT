@@ -17,9 +17,8 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
 
     override fun visitUseAlias(o: WitUseAlias) {
         highlight(o.identifierSafe, SYM_TYPE)
-        o.aliasName?.let { highlight(it, SYM_TYPE) }
+        o.identifierSafe?.let { highlight(it, SYM_TYPE) }
     }
-
 
     override fun visitImport(o: WitImport) {
         super.visitImport(o)
@@ -39,11 +38,11 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
     }
 
     override fun visitEnum(o: WitEnum) {
-        o.identifierSafe?.let { highlight(it, NUMBER) }
+        o.identifierFree?.let { highlight(it, NUMBER) }
     }
 
     override fun visitFlags(o: WitFlags) {
-        o.identifierSafe?.let { highlight(it, NUMBER) }
+        o.identifierFree?.let { highlight(it, NUMBER) }
     }
 
     override fun visitSemanticNumber(o: WitSemanticNumber) {
@@ -51,7 +50,7 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
     }
 
     override fun visitVariant(o: WitVariant) {
-        o.identifierSafe?.let { highlight(it, SYM_TYPE) }
+        o.identifierFree?.let { highlight(it, SYM_TYPE) }
     }
 
     override fun visitVariantItem(o: WitVariantItem) {
