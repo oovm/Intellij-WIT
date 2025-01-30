@@ -30,8 +30,8 @@ class WitSyntaxHighlighter : SyntaxHighlighterBase() {
             BRACKET_L, BRACKET_R -> WitColor.BRACKETS
             BRACE_L, BRACE_R -> WitColor.BRACES
             COLON, EQ -> WitColor.OPERATION
-            AT, STAR -> WitColor.OPERATION
-
+            STAR -> WitColor.OPERATION
+            AT  -> WitColor.SYM_BUILTIN
             COMMA -> WitColor.COMMA
             // atom
             VERSION -> WitColor.NUMBER

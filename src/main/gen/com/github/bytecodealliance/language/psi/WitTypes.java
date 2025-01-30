@@ -11,7 +11,8 @@ public interface WitTypes {
   IElementType ALIAS_NAME = new WitElementType("ALIAS_NAME");
   IElementType ANNOTATION = new WitElementType("ANNOTATION");
   IElementType ANNOTATIONS = new WitElementType("ANNOTATIONS");
-  IElementType ANNOTATION_ARGUMENTS = new WitElementType("ANNOTATION_ARGUMENTS");
+  IElementType ANNOTATION_BODY = new WitElementType("ANNOTATION_BODY");
+  IElementType ANNOTATION_TERM = new WitElementType("ANNOTATION_TERM");
   IElementType CONSTRUCTOR = new WitElementType("CONSTRUCTOR");
   IElementType DEFINE_INTERFACE = new WitElementType("DEFINE_INTERFACE");
   IElementType DEFINE_TYPE = new WitElementType("DEFINE_TYPE");
@@ -114,8 +115,11 @@ public interface WitTypes {
       else if (type == ANNOTATIONS) {
         return new WitAnnotationsNode(node);
       }
-      else if (type == ANNOTATION_ARGUMENTS) {
-        return new WitAnnotationArgumentsNode(node);
+      else if (type == ANNOTATION_BODY) {
+        return new WitAnnotationBodyNode(node);
+      }
+      else if (type == ANNOTATION_TERM) {
+        return new WitAnnotationTermNode(node);
       }
       else if (type == CONSTRUCTOR) {
         return new WitConstructorNode(node);

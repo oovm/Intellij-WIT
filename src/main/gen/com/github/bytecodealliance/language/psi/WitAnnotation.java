@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface WitAnnotation extends PsiElement {
 
   @Nullable
-  WitAnnotationArguments getAnnotationArguments();
+  WitAnnotationBody getAnnotationBody();
 
   @NotNull
   WitIdentifierFree getIdentifierFree();

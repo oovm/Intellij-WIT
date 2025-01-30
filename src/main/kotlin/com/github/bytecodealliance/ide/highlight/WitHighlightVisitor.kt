@@ -66,8 +66,16 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
         highlight(o.identifier, SYM_FUNCTION)
     }
 
+    override fun visitAnnotation(o: WitAnnotation) {
+        highlight(o.identifierFree, SYM_BUILTIN)
+    }
+
+    override fun visitAnnotationArguments(o: WitAnnotationArguments) {
+
+    }
+
     override fun visitModifier(o: WitModifier) {
-        highlight(o, KEYWORD)
+        highlight(o, SYM_BUILTIN)
     }
 
     override fun visitParameter(o: WitParameter) {
@@ -86,14 +94,14 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
             "s8", "s16", "s32", "s64",
             "f32", "f64", "float32", "float64",
             "string"
-            -> {
+                -> {
                 highlight(o.identifier, KEYWORD)
             }
 
             "list", "tuple",
             "option", "result",
             "borrow", "own",
-            -> {
+                -> {
                 highlight(o.identifier, SYM_BUILTIN)
             }
 

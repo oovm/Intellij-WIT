@@ -175,10 +175,12 @@ function-signature ::= modifier? KW_FUNCTION tuple (TO type-hint)? {
 // =====================================================================================================
 // @since(version = 0.2.0)
 annotations ::= annotation*;
-annotation ::= AT identifier-free (PARENTHESIS_L annotation-arguments PARENTHESIS_R)? {
+annotation ::= AT identifier-free annotation-body? {
 	pin = 2
 }
-annotation-arguments ::= identifier EQ (VERSION|identifier)
+annotation-body ::= PARENTHESIS_L (annotation-term (COMMA annotation-term)* COMMA?)? PARENTHESIS_R
+annotation-term ::= identifier EQ (VERSION|identifier)
+
 // type type-name = type-hint;
 define-type ::= annotations KW_TYPE identifier EQ type-hint {
 	pin = 2

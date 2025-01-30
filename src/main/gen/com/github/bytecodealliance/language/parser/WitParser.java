@@ -49,7 +49,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AT identifier-free (PARENTHESIS_L annotation-arguments PARENTHESIS_R)?
+  // AT identifier-free annotation-body?
   public static boolean annotation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation")) return false;
     if (!nextTokenIs(b, AT)) return false;
@@ -63,42 +63,92 @@ public class WitParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (PARENTHESIS_L annotation-arguments PARENTHESIS_R)?
+  // annotation-body?
   private static boolean annotation_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation_2")) return false;
-    annotation_2_0(b, l + 1);
+    annotation_body(b, l + 1);
     return true;
   }
 
-  // PARENTHESIS_L annotation-arguments PARENTHESIS_R
-  private static boolean annotation_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_2_0")) return false;
+  /* ********************************************************** */
+  // PARENTHESIS_L (annotation-term (COMMA annotation-term)* COMMA?)? PARENTHESIS_R
+  public static boolean annotation_body(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_body")) return false;
+    if (!nextTokenIs(b, PARENTHESIS_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, PARENTHESIS_L);
-    r = r && annotation_arguments(b, l + 1);
+    r = r && annotation_body_1(b, l + 1);
     r = r && consumeToken(b, PARENTHESIS_R);
+    exit_section_(b, m, ANNOTATION_BODY, r);
+    return r;
+  }
+
+  // (annotation-term (COMMA annotation-term)* COMMA?)?
+  private static boolean annotation_body_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_body_1")) return false;
+    annotation_body_1_0(b, l + 1);
+    return true;
+  }
+
+  // annotation-term (COMMA annotation-term)* COMMA?
+  private static boolean annotation_body_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_body_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = annotation_term(b, l + 1);
+    r = r && annotation_body_1_0_1(b, l + 1);
+    r = r && annotation_body_1_0_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
+  // (COMMA annotation-term)*
+  private static boolean annotation_body_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_body_1_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!annotation_body_1_0_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "annotation_body_1_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA annotation-term
+  private static boolean annotation_body_1_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_body_1_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && annotation_term(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // COMMA?
+  private static boolean annotation_body_1_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_body_1_0_2")) return false;
+    consumeToken(b, COMMA);
+    return true;
+  }
+
   /* ********************************************************** */
   // identifier EQ (VERSION|identifier)
-  public static boolean annotation_arguments(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_arguments")) return false;
-    if (!nextTokenIs(b, "<annotation arguments>", ESCAPED, SYMBOL)) return false;
+  public static boolean annotation_term(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_term")) return false;
+    if (!nextTokenIs(b, "<annotation term>", ESCAPED, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, ANNOTATION_ARGUMENTS, "<annotation arguments>");
+    Marker m = enter_section_(b, l, _NONE_, ANNOTATION_TERM, "<annotation term>");
     r = identifier(b, l + 1);
     r = r && consumeToken(b, EQ);
-    r = r && annotation_arguments_2(b, l + 1);
+    r = r && annotation_term_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // VERSION|identifier
-  private static boolean annotation_arguments_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_arguments_2")) return false;
+  private static boolean annotation_term_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_term_2")) return false;
     boolean r;
     r = consumeToken(b, VERSION);
     if (!r) r = identifier(b, l + 1);
