@@ -10,13 +10,10 @@ public interface WitResource extends PsiElement {
   @NotNull
   WitAnnotations getAnnotations();
 
-  @NotNull
-  List<WitConstructor> getConstructorList();
-
   @Nullable
   WitIdentifierSafe getIdentifierSafe();
 
-  @NotNull
-  List<WitMethod> getMethodList();
+  @Nullable
+  WitResourceBody getResourceBody();
 
 }

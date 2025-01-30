@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface WitAliasName extends PsiElement {
+public interface WitResourceBody extends PsiElement {
 
   @NotNull
-  WitIdentifierFree getIdentifierFree();
+  List<WitConstructor> getConstructorList();
+
+  @NotNull
+  List<WitMethod> getMethodList();
 
 }

@@ -11,9 +11,9 @@ public interface WitVariant extends PsiElement {
   WitAnnotations getAnnotations();
 
   @Nullable
-  WitIdentifierSafe getIdentifierSafe();
+  WitIdentifierFree getIdentifierFree();
 
-  @NotNull
-  List<WitVariantItem> getVariantItemList();
+  @Nullable
+  WitVariantBody getVariantBody();
 
 }

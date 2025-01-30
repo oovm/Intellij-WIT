@@ -35,14 +35,14 @@ public class WitFlagsNode extends MixinFlags implements WitFlags {
 
   @Override
   @Nullable
-  public WitIdentifierSafe getIdentifierSafe() {
-    return findChildByClass(WitIdentifierSafe.class);
+  public WitFlagsBody getFlagsBody() {
+    return findChildByClass(WitFlagsBody.class);
   }
 
   @Override
-  @NotNull
-  public List<WitSemanticNumber> getSemanticNumberList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitSemanticNumber.class);
+  @Nullable
+  public WitIdentifierFree getIdentifierFree() {
+    return findChildByClass(WitIdentifierFree.class);
   }
 
 }

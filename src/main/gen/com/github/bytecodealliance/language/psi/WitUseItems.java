@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface WitUseItems extends PsiElement {
 
-  @NotNull
-  List<WitUseAlias> getUseAliasList();
+  @Nullable
+  WitUseBody getUseBody();
 
 }

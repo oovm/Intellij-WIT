@@ -28,7 +28,7 @@ class WitFormatBuilder : FormattingModelBuilder {
 
         fun computeIndent(parent: ASTNode, child: ASTNode): Indent? {
             return when (parent.psi) {
-                is WitWorld -> parent.indentInRange(child, 1, 1)
+                is WitWorld -> parent.indentInRange(child, 2, 1)
                 is WitInterfaceBody -> parent.indentInRange(child, 1, 1)
                 is WitUseItems -> parent.indentInRange(child, 2, 1)
                 is WitResource -> parent.indentInRange(child, 1, 1)

@@ -8,17 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.bytecodealliance.language.psi.WitTypes.*;
-import com.github.bytecodealliance.language.mixin.MixinWorld;
+import com.github.bytecodealliance.language.psi.WitElement;
 import com.github.bytecodealliance.language.psi.*;
 
-public class WitWorldNode extends MixinWorld implements WitWorld {
+public class WitResourceBodyNode extends WitElement implements WitResourceBody {
 
-  public WitWorldNode(@NotNull ASTNode node) {
+  public WitResourceBodyNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull WitVisitor visitor) {
-    visitor.visitWorld(this);
+    visitor.visitResourceBody(this);
   }
 
   @Override
@@ -29,20 +29,14 @@ public class WitWorldNode extends MixinWorld implements WitWorld {
 
   @Override
   @NotNull
-  public WitAnnotations getAnnotations() {
-    return findNotNullChildByClass(WitAnnotations.class);
+  public List<WitConstructor> getConstructorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitConstructor.class);
   }
 
   @Override
-  @Nullable
-  public WitIdentifierFree getIdentifierFree() {
-    return findChildByClass(WitIdentifierFree.class);
-  }
-
-  @Override
-  @Nullable
-  public WitWorldBody getWorldBody() {
-    return findChildByClass(WitWorldBody.class);
+  @NotNull
+  public List<WitMethod> getMethodList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitMethod.class);
   }
 
 }

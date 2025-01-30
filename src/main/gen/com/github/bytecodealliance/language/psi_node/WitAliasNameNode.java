@@ -27,4 +27,10 @@ public class WitAliasNameNode extends WitElement implements WitAliasName {
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public WitIdentifierFree getIdentifierFree() {
+    return findNotNullChildByClass(WitIdentifierFree.class);
+  }
+
 }

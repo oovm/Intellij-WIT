@@ -11,9 +11,9 @@ public interface WitEnum extends PsiElement {
   WitAnnotations getAnnotations();
 
   @Nullable
-  WitIdentifierSafe getIdentifierSafe();
+  WitEnumBody getEnumBody();
 
-  @NotNull
-  List<WitSemanticNumber> getSemanticNumberList();
+  @Nullable
+  WitIdentifierFree getIdentifierFree();
 
 }

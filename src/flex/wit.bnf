@@ -90,10 +90,11 @@ package ::= KW_PACKAGE package-name {
 package-name ::= module-name (COLON module-name)* package-version?;
 package-version ::= AT VERSION;
 // world name { }
-world ::= annotations KW_WORLD identifier-safe BRACE_L world-element* BRACE_R {
+world ::= annotations KW_WORLD identifier-free world-body {
 	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinWorld"
 }
+world-body ::= <<block world-element>>
 private world-element ::= SEMICOLON
 	| include
 	| import
@@ -131,13 +132,12 @@ export-term ::= function
 use      ::= annotations KW_USE include-name use-items? {
 	pin = 2
 }
-use-items ::= DOT BRACE_L (use-alias (COMMA use-alias)* COMMA?)? BRACE_R {
+use-items ::= DOT use-body {
 	pin = 1
 }
-use-alias ::= identifier-safe (KW_AS alias-name)? {
-
-}
-
+use-body  ::= <<brace use-alias>>
+use-alias ::= identifier-safe (KW_AS alias-name)?;
+alias-name::= identifier-free;
 // interface name { }
 define-interface ::= annotations  KW_INTERFACE interface-name interface-body {
 	pin = 2
@@ -149,7 +149,7 @@ inline-interface ::= interface-name COLON KW_INTERFACE interface-body {
 //	extends = interface
 //	mixin = "com.github.bytecodealliance.language.mixin.MixinInterface"
 }
-interface-body ::= BRACE_L interface-element* BRACE_R;
+interface-body ::= <<block interface-element>>
 private interface-element ::= SEMICOLON
 	| use
 	| define-type
@@ -178,7 +178,7 @@ annotations ::= annotation*;
 annotation ::= AT identifier-free annotation-body? {
 	pin = 1
 }
-annotation-body ::= PARENTHESIS_L (annotation-pair (COMMA annotation-pair)* COMMA?)? PARENTHESIS_R
+annotation-body ::= <<parenthesis annotation-pair>>
 annotation-pair ::= identifier-safe EQ annotation-value
 annotation-value ::= VERSION
 	| identifier-safe
@@ -188,25 +188,27 @@ define-type ::= annotations KW_TYPE identifier-safe EQ type-hint {
 }
 type-hint ::= tuple | type-generic;
 type-generic ::= identifier-safe generic?;
-tuple ::= PARENTHESIS_L (parameter (COMMA parameter)* COMMA?)? PARENTHESIS_R;
+tuple ::= <<parenthesis parameter>>;
 parameter ::= identifier-safe COLON type-hint {
 
 }
-generic   ::= ANGLE_L (type-hint (COMMA type-hint)* COMMA?)? ANGLE_R;
+generic   ::= <<angle type-hint>>;
 // resource type-name { method: func() };
-resource  ::= annotations KW_RESOURCE identifier-safe (BRACE_L resource-element* BRACE_R)? {
+resource  ::= annotations KW_RESOURCE identifier-safe resource-body? {
 	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinResource"
 }
+resource-body ::= <<block resource-element>>
 private resource-element ::=
     method
   | constructor
   | SEMICOLON
 // record type-name { field: type-hint, key: value };
-record   ::= annotations KW_RECORD identifier-safe BRACE_L record-element* BRACE_R {
+record   ::= annotations KW_RECORD identifier-safe record-body {
 	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinRecord"
 }
+record-body ::= <<block record-element>>
 private record-element ::=
     record-field
   | COMMA
@@ -216,20 +218,21 @@ record-field    ::= identifier-safe COLON type-hint {
 }
 
 
-flags       ::= annotations KW_FLAGS identifier-safe BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R {
+flags      ::= annotations KW_FLAGS identifier-free flags-body {
 	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinFlags"
 }
-enum       ::= annotations KW_ENUM identifier-safe BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R {
+flags-body ::= <<brace semantic-number>>
+enum       ::= annotations KW_ENUM identifier-free enum-body {
 	pin = 2
 }
-
-
-variant          ::= annotations KW_VARIANT identifier-safe BRACE_L (variant-item (COMMA variant-item)* COMMA?)? BRACE_R {
+enum-body ::= <<brace semantic-number>>
+variant   ::= annotations KW_VARIANT identifier-free variant-body {
 	pin = 2
     mixin = "com.github.bytecodealliance.language.mixin.MixinVariant"
 }
-variant-item 	 ::= identifier-safe (PARENTHESIS_L type-hint PARENTHESIS_R)? {
+variant-body ::= <<brace variant-item>>
+variant-item ::= identifier-safe (PARENTHESIS_L type-hint PARENTHESIS_R)? {
     mixin = "com.github.bytecodealliance.language.mixin.MixinVariantItem"
 }
 
@@ -240,7 +243,11 @@ variant-item 	 ::= identifier-safe (PARENTHESIS_L type-hint PARENTHESIS_R)? {
 modifier            ::= SYMBOL;
 module-name         ::= SYMBOL | ESCAPED;
 interface-name      ::= SYMBOL | ESCAPED;
-alias-name          ::= SYMBOL | ESCAPED;
 semantic-number     ::= SYMBOL | ESCAPED;
 identifier-safe     ::= SYMBOL | ESCAPED;
 identifier-free     ::= SYMBOL | ESCAPED;
+
+private meta parenthesis ::= PARENTHESIS_L (<<term>> (COMMA <<term>>)* COMMA?)? PARENTHESIS_R;
+private meta brace ::= BRACE_L (<<term>> (COMMA <<term>>)* COMMA?)? BRACE_R;
+private meta block ::= BRACE_L <<term>>* BRACE_R;
+private meta angle ::= ANGLE_L (<<term>> (COMMA <<term>>)* COMMA?)? ANGLE_R;

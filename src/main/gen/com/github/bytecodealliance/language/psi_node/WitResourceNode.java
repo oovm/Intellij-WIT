@@ -34,21 +34,15 @@ public class WitResourceNode extends MixinResource implements WitResource {
   }
 
   @Override
-  @NotNull
-  public List<WitConstructor> getConstructorList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitConstructor.class);
-  }
-
-  @Override
   @Nullable
   public WitIdentifierSafe getIdentifierSafe() {
     return findChildByClass(WitIdentifierSafe.class);
   }
 
   @Override
-  @NotNull
-  public List<WitMethod> getMethodList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitMethod.class);
+  @Nullable
+  public WitResourceBody getResourceBody() {
+    return findChildByClass(WitResourceBody.class);
   }
 
 }

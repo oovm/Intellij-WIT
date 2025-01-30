@@ -47,6 +47,10 @@ public class WitVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitEnumBody(@NotNull WitEnumBody o) {
+    visitPsiElement(o);
+  }
+
   public void visitExport(@NotNull WitExport o) {
     visitPsiElement(o);
   }
@@ -56,6 +60,10 @@ public class WitVisitor extends PsiElementVisitor {
   }
 
   public void visitFlags(@NotNull WitFlags o) {
+    visitPsiElement(o);
+  }
+
+  public void visitFlagsBody(@NotNull WitFlagsBody o) {
     visitPsiElement(o);
   }
 
@@ -135,11 +143,19 @@ public class WitVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitRecordBody(@NotNull WitRecordBody o) {
+    visitPsiElement(o);
+  }
+
   public void visitRecordField(@NotNull WitRecordField o) {
     visitPsiElement(o);
   }
 
   public void visitResource(@NotNull WitResource o) {
+    visitPsiElement(o);
+  }
+
+  public void visitResourceBody(@NotNull WitResourceBody o) {
     visitPsiElement(o);
   }
 
@@ -167,6 +183,10 @@ public class WitVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitUseBody(@NotNull WitUseBody o) {
+    visitPsiElement(o);
+  }
+
   public void visitUseItems(@NotNull WitUseItems o) {
     visitPsiElement(o);
   }
@@ -175,11 +195,19 @@ public class WitVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitVariantBody(@NotNull WitVariantBody o) {
+    visitPsiElement(o);
+  }
+
   public void visitVariantItem(@NotNull WitVariantItem o) {
     visitPsiElement(o);
   }
 
   public void visitWorld(@NotNull WitWorld o) {
+    visitPsiElement(o);
+  }
+
+  public void visitWorldBody(@NotNull WitWorldBody o) {
     visitPsiElement(o);
   }
 

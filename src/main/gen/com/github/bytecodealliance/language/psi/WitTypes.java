@@ -18,9 +18,11 @@ public interface WitTypes {
   IElementType DEFINE_INTERFACE = new WitElementType("DEFINE_INTERFACE");
   IElementType DEFINE_TYPE = new WitElementType("DEFINE_TYPE");
   IElementType ENUM = new WitElementType("ENUM");
+  IElementType ENUM_BODY = new WitElementType("ENUM_BODY");
   IElementType EXPORT = new WitElementType("EXPORT");
   IElementType EXPORT_TERM = new WitElementType("EXPORT_TERM");
   IElementType FLAGS = new WitElementType("FLAGS");
+  IElementType FLAGS_BODY = new WitElementType("FLAGS_BODY");
   IElementType FUNCTION = new WitElementType("FUNCTION");
   IElementType FUNCTION_SIGNATURE = new WitElementType("FUNCTION_SIGNATURE");
   IElementType GENERIC = new WitElementType("GENERIC");
@@ -40,18 +42,23 @@ public interface WitTypes {
   IElementType PACKAGE_VERSION = new WitElementType("PACKAGE_VERSION");
   IElementType PARAMETER = new WitElementType("PARAMETER");
   IElementType RECORD = new WitElementType("RECORD");
+  IElementType RECORD_BODY = new WitElementType("RECORD_BODY");
   IElementType RECORD_FIELD = new WitElementType("RECORD_FIELD");
   IElementType RESOURCE = new WitElementType("RESOURCE");
+  IElementType RESOURCE_BODY = new WitElementType("RESOURCE_BODY");
   IElementType SEMANTIC_NUMBER = new WitElementType("SEMANTIC_NUMBER");
   IElementType TUPLE = new WitElementType("TUPLE");
   IElementType TYPE_GENERIC = new WitElementType("TYPE_GENERIC");
   IElementType TYPE_HINT = new WitElementType("TYPE_HINT");
   IElementType USE = new WitElementType("USE");
   IElementType USE_ALIAS = new WitElementType("USE_ALIAS");
+  IElementType USE_BODY = new WitElementType("USE_BODY");
   IElementType USE_ITEMS = new WitElementType("USE_ITEMS");
   IElementType VARIANT = new WitElementType("VARIANT");
+  IElementType VARIANT_BODY = new WitElementType("VARIANT_BODY");
   IElementType VARIANT_ITEM = new WitElementType("VARIANT_ITEM");
   IElementType WORLD = new WitElementType("WORLD");
+  IElementType WORLD_BODY = new WitElementType("WORLD_BODY");
 
   IElementType ACCENT = new WitTokenType("^");
   IElementType ANGLE_L = new WitTokenType("<");
@@ -137,6 +144,9 @@ public interface WitTypes {
       else if (type == ENUM) {
         return new WitEnumNode(node);
       }
+      else if (type == ENUM_BODY) {
+        return new WitEnumBodyNode(node);
+      }
       else if (type == EXPORT) {
         return new WitExportNode(node);
       }
@@ -145,6 +155,9 @@ public interface WitTypes {
       }
       else if (type == FLAGS) {
         return new WitFlagsNode(node);
+      }
+      else if (type == FLAGS_BODY) {
+        return new WitFlagsBodyNode(node);
       }
       else if (type == FUNCTION) {
         return new WitFunctionNode(node);
@@ -203,11 +216,17 @@ public interface WitTypes {
       else if (type == RECORD) {
         return new WitRecordNode(node);
       }
+      else if (type == RECORD_BODY) {
+        return new WitRecordBodyNode(node);
+      }
       else if (type == RECORD_FIELD) {
         return new WitRecordFieldNode(node);
       }
       else if (type == RESOURCE) {
         return new WitResourceNode(node);
+      }
+      else if (type == RESOURCE_BODY) {
+        return new WitResourceBodyNode(node);
       }
       else if (type == SEMANTIC_NUMBER) {
         return new WitSemanticNumberNode(node);
@@ -227,17 +246,26 @@ public interface WitTypes {
       else if (type == USE_ALIAS) {
         return new WitUseAliasNode(node);
       }
+      else if (type == USE_BODY) {
+        return new WitUseBodyNode(node);
+      }
       else if (type == USE_ITEMS) {
         return new WitUseItemsNode(node);
       }
       else if (type == VARIANT) {
         return new WitVariantNode(node);
       }
+      else if (type == VARIANT_BODY) {
+        return new WitVariantBodyNode(node);
+      }
       else if (type == VARIANT_ITEM) {
         return new WitVariantItemNode(node);
       }
       else if (type == WORLD) {
         return new WitWorldNode(node);
+      }
+      else if (type == WORLD_BODY) {
+        return new WitWorldBodyNode(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

@@ -35,14 +35,14 @@ public class WitEnumNode extends WitElement implements WitEnum {
 
   @Override
   @Nullable
-  public WitIdentifierSafe getIdentifierSafe() {
-    return findChildByClass(WitIdentifierSafe.class);
+  public WitEnumBody getEnumBody() {
+    return findChildByClass(WitEnumBody.class);
   }
 
   @Override
-  @NotNull
-  public List<WitSemanticNumber> getSemanticNumberList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitSemanticNumber.class);
+  @Nullable
+  public WitIdentifierFree getIdentifierFree() {
+    return findChildByClass(WitIdentifierFree.class);
   }
 
 }

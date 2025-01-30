@@ -40,9 +40,9 @@ public class WitRecordNode extends MixinRecord implements WitRecord {
   }
 
   @Override
-  @NotNull
-  public List<WitRecordField> getRecordFieldList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitRecordField.class);
+  @Nullable
+  public WitRecordBody getRecordBody() {
+    return findChildByClass(WitRecordBody.class);
   }
 
 }

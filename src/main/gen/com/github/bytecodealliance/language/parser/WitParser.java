@@ -36,16 +36,77 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SYMBOL | ESCAPED
+  // identifier-free
   public static boolean alias_name(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "alias_name")) return false;
     if (!nextTokenIs(b, "<alias name>", ESCAPED, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ALIAS_NAME, "<alias name>");
-    r = consumeToken(b, SYMBOL);
-    if (!r) r = consumeToken(b, ESCAPED);
+    r = identifier_free(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  /* ********************************************************** */
+  // ANGLE_L (<<term>> (COMMA <<term>>)* COMMA?)? ANGLE_R
+  static boolean angle(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "angle")) return false;
+    if (!nextTokenIs(b, ANGLE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ANGLE_L);
+    r = r && angle_1(b, l + 1, _term);
+    r = r && consumeToken(b, ANGLE_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (<<term>> (COMMA <<term>>)* COMMA?)?
+  private static boolean angle_1(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "angle_1")) return false;
+    angle_1_0(b, l + 1, _term);
+    return true;
+  }
+
+  // <<term>> (COMMA <<term>>)* COMMA?
+  private static boolean angle_1_0(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "angle_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = _term.parse(b, l);
+    r = r && angle_1_0_1(b, l + 1, _term);
+    r = r && angle_1_0_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (COMMA <<term>>)*
+  private static boolean angle_1_0_1(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "angle_1_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!angle_1_0_1_0(b, l + 1, _term)) break;
+      if (!empty_element_parsed_guard_(b, "angle_1_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA <<term>>
+  private static boolean angle_1_0_1_0(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "angle_1_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && _term.parse(b, l);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // COMMA?
+  private static boolean angle_1_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "angle_1_0_2")) return false;
+    consumeToken(b, COMMA);
+    return true;
   }
 
   /* ********************************************************** */
@@ -71,65 +132,15 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PARENTHESIS_L (annotation-pair (COMMA annotation-pair)* COMMA?)? PARENTHESIS_R
+  // <<parenthesis annotation-pair>>
   public static boolean annotation_body(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation_body")) return false;
     if (!nextTokenIs(b, PARENTHESIS_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, PARENTHESIS_L);
-    r = r && annotation_body_1(b, l + 1);
-    r = r && consumeToken(b, PARENTHESIS_R);
+    r = parenthesis(b, l + 1, WitParser::annotation_pair);
     exit_section_(b, m, ANNOTATION_BODY, r);
     return r;
-  }
-
-  // (annotation-pair (COMMA annotation-pair)* COMMA?)?
-  private static boolean annotation_body_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_body_1")) return false;
-    annotation_body_1_0(b, l + 1);
-    return true;
-  }
-
-  // annotation-pair (COMMA annotation-pair)* COMMA?
-  private static boolean annotation_body_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_body_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = annotation_pair(b, l + 1);
-    r = r && annotation_body_1_0_1(b, l + 1);
-    r = r && annotation_body_1_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (COMMA annotation-pair)*
-  private static boolean annotation_body_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_body_1_0_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!annotation_body_1_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "annotation_body_1_0_1", c)) break;
-    }
-    return true;
-  }
-
-  // COMMA annotation-pair
-  private static boolean annotation_body_1_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_body_1_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && annotation_pair(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // COMMA?
-  private static boolean annotation_body_1_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_body_1_0_2")) return false;
-    consumeToken(b, COMMA);
-    return true;
   }
 
   /* ********************************************************** */
@@ -170,6 +181,93 @@ public class WitParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "annotations", c)) break;
     }
     exit_section_(b, l, m, true, false, null);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // BRACE_L <<term>>* BRACE_R
+  static boolean block(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "block")) return false;
+    if (!nextTokenIs(b, BRACE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BRACE_L);
+    r = r && block_1(b, l + 1, _term);
+    r = r && consumeToken(b, BRACE_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // <<term>>*
+  private static boolean block_1(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "block_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!_term.parse(b, l)) break;
+      if (!empty_element_parsed_guard_(b, "block_1", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // BRACE_L (<<term>> (COMMA <<term>>)* COMMA?)? BRACE_R
+  static boolean brace(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "brace")) return false;
+    if (!nextTokenIs(b, BRACE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BRACE_L);
+    r = r && brace_1(b, l + 1, _term);
+    r = r && consumeToken(b, BRACE_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (<<term>> (COMMA <<term>>)* COMMA?)?
+  private static boolean brace_1(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "brace_1")) return false;
+    brace_1_0(b, l + 1, _term);
+    return true;
+  }
+
+  // <<term>> (COMMA <<term>>)* COMMA?
+  private static boolean brace_1_0(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "brace_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = _term.parse(b, l);
+    r = r && brace_1_0_1(b, l + 1, _term);
+    r = r && brace_1_0_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (COMMA <<term>>)*
+  private static boolean brace_1_0_1(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "brace_1_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!brace_1_0_1_0(b, l + 1, _term)) break;
+      if (!empty_element_parsed_guard_(b, "brace_1_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA <<term>>
+  private static boolean brace_1_0_1_0(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "brace_1_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && _term.parse(b, l);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // COMMA?
+  private static boolean brace_1_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "brace_1_0_2")) return false;
+    consumeToken(b, COMMA);
     return true;
   }
 
@@ -241,7 +339,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_ENUM identifier-safe BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R
+  // annotations KW_ENUM identifier-free enum-body
   public static boolean enum_$(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "enum_$")) return false;
     if (!nextTokenIs(b, "<enum $>", AT, KW_ENUM)) return false;
@@ -250,60 +348,22 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_ENUM);
     p = r; // pin = 2
-    r = r && report_error_(b, identifier_safe(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, BRACE_L)) && r;
-    r = p && report_error_(b, enum_4(b, l + 1)) && r;
-    r = p && consumeToken(b, BRACE_R) && r;
+    r = r && report_error_(b, identifier_free(b, l + 1));
+    r = p && enum_body(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // (semantic-number (COMMA semantic-number)* COMMA?)?
-  private static boolean enum_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "enum_4")) return false;
-    enum_4_0(b, l + 1);
-    return true;
-  }
-
-  // semantic-number (COMMA semantic-number)* COMMA?
-  private static boolean enum_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "enum_4_0")) return false;
+  /* ********************************************************** */
+  // <<brace semantic-number>>
+  public static boolean enum_body(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_body")) return false;
+    if (!nextTokenIs(b, BRACE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = semantic_number(b, l + 1);
-    r = r && enum_4_0_1(b, l + 1);
-    r = r && enum_4_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
+    r = brace(b, l + 1, WitParser::semantic_number);
+    exit_section_(b, m, ENUM_BODY, r);
     return r;
-  }
-
-  // (COMMA semantic-number)*
-  private static boolean enum_4_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "enum_4_0_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!enum_4_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "enum_4_0_1", c)) break;
-    }
-    return true;
-  }
-
-  // COMMA semantic-number
-  private static boolean enum_4_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "enum_4_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && semantic_number(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // COMMA?
-  private static boolean enum_4_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "enum_4_0_2")) return false;
-    consumeToken(b, COMMA);
-    return true;
   }
 
   /* ********************************************************** */
@@ -337,7 +397,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_FLAGS identifier-safe BRACE_L (semantic-number (COMMA semantic-number)* COMMA?)? BRACE_R
+  // annotations KW_FLAGS identifier-free flags-body
   public static boolean flags(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "flags")) return false;
     if (!nextTokenIs(b, "<flags>", AT, KW_FLAGS)) return false;
@@ -346,60 +406,22 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_FLAGS);
     p = r; // pin = 2
-    r = r && report_error_(b, identifier_safe(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, BRACE_L)) && r;
-    r = p && report_error_(b, flags_4(b, l + 1)) && r;
-    r = p && consumeToken(b, BRACE_R) && r;
+    r = r && report_error_(b, identifier_free(b, l + 1));
+    r = p && flags_body(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // (semantic-number (COMMA semantic-number)* COMMA?)?
-  private static boolean flags_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "flags_4")) return false;
-    flags_4_0(b, l + 1);
-    return true;
-  }
-
-  // semantic-number (COMMA semantic-number)* COMMA?
-  private static boolean flags_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "flags_4_0")) return false;
+  /* ********************************************************** */
+  // <<brace semantic-number>>
+  public static boolean flags_body(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "flags_body")) return false;
+    if (!nextTokenIs(b, BRACE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = semantic_number(b, l + 1);
-    r = r && flags_4_0_1(b, l + 1);
-    r = r && flags_4_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
+    r = brace(b, l + 1, WitParser::semantic_number);
+    exit_section_(b, m, FLAGS_BODY, r);
     return r;
-  }
-
-  // (COMMA semantic-number)*
-  private static boolean flags_4_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "flags_4_0_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!flags_4_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "flags_4_0_1", c)) break;
-    }
-    return true;
-  }
-
-  // COMMA semantic-number
-  private static boolean flags_4_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "flags_4_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && semantic_number(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // COMMA?
-  private static boolean flags_4_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "flags_4_0_2")) return false;
-    consumeToken(b, COMMA);
-    return true;
   }
 
   /* ********************************************************** */
@@ -458,65 +480,15 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ANGLE_L (type-hint (COMMA type-hint)* COMMA?)? ANGLE_R
+  // <<angle type-hint>>
   public static boolean generic(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "generic")) return false;
     if (!nextTokenIs(b, ANGLE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ANGLE_L);
-    r = r && generic_1(b, l + 1);
-    r = r && consumeToken(b, ANGLE_R);
+    r = angle(b, l + 1, WitParser::type_hint);
     exit_section_(b, m, GENERIC, r);
     return r;
-  }
-
-  // (type-hint (COMMA type-hint)* COMMA?)?
-  private static boolean generic_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "generic_1")) return false;
-    generic_1_0(b, l + 1);
-    return true;
-  }
-
-  // type-hint (COMMA type-hint)* COMMA?
-  private static boolean generic_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "generic_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = type_hint(b, l + 1);
-    r = r && generic_1_0_1(b, l + 1);
-    r = r && generic_1_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (COMMA type-hint)*
-  private static boolean generic_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "generic_1_0_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!generic_1_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "generic_1_0_1", c)) break;
-    }
-    return true;
-  }
-
-  // COMMA type-hint
-  private static boolean generic_1_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "generic_1_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && type_hint(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // COMMA?
-  private static boolean generic_1_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "generic_1_0_2")) return false;
-    consumeToken(b, COMMA);
-    return true;
   }
 
   /* ********************************************************** */
@@ -647,28 +619,15 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // BRACE_L interface-element* BRACE_R
+  // <<block interface-element>>
   public static boolean interface_body(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "interface_body")) return false;
     if (!nextTokenIs(b, BRACE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, BRACE_L);
-    r = r && interface_body_1(b, l + 1);
-    r = r && consumeToken(b, BRACE_R);
+    r = block(b, l + 1, WitParser::interface_element);
     exit_section_(b, m, INTERFACE_BODY, r);
     return r;
-  }
-
-  // interface-element*
-  private static boolean interface_body_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "interface_body_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!interface_element(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "interface_body_1", c)) break;
-    }
-    return true;
   }
 
   /* ********************************************************** */
@@ -840,7 +799,69 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_RECORD identifier-safe BRACE_L record-element* BRACE_R
+  // PARENTHESIS_L (<<term>> (COMMA <<term>>)* COMMA?)? PARENTHESIS_R
+  static boolean parenthesis(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "parenthesis")) return false;
+    if (!nextTokenIs(b, PARENTHESIS_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PARENTHESIS_L);
+    r = r && parenthesis_1(b, l + 1, _term);
+    r = r && consumeToken(b, PARENTHESIS_R);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (<<term>> (COMMA <<term>>)* COMMA?)?
+  private static boolean parenthesis_1(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "parenthesis_1")) return false;
+    parenthesis_1_0(b, l + 1, _term);
+    return true;
+  }
+
+  // <<term>> (COMMA <<term>>)* COMMA?
+  private static boolean parenthesis_1_0(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "parenthesis_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = _term.parse(b, l);
+    r = r && parenthesis_1_0_1(b, l + 1, _term);
+    r = r && parenthesis_1_0_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (COMMA <<term>>)*
+  private static boolean parenthesis_1_0_1(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "parenthesis_1_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!parenthesis_1_0_1_0(b, l + 1, _term)) break;
+      if (!empty_element_parsed_guard_(b, "parenthesis_1_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA <<term>>
+  private static boolean parenthesis_1_0_1_0(PsiBuilder b, int l, Parser _term) {
+    if (!recursion_guard_(b, l, "parenthesis_1_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && _term.parse(b, l);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // COMMA?
+  private static boolean parenthesis_1_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parenthesis_1_0_2")) return false;
+    consumeToken(b, COMMA);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // annotations KW_RECORD identifier-safe record-body
   public static boolean record(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "record")) return false;
     if (!nextTokenIs(b, "<record>", AT, KW_RECORD)) return false;
@@ -850,22 +871,21 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, KW_RECORD);
     p = r; // pin = 2
     r = r && report_error_(b, identifier_safe(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, BRACE_L)) && r;
-    r = p && report_error_(b, record_4(b, l + 1)) && r;
-    r = p && consumeToken(b, BRACE_R) && r;
+    r = p && record_body(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // record-element*
-  private static boolean record_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "record_4")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!record_element(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "record_4", c)) break;
-    }
-    return true;
+  /* ********************************************************** */
+  // <<block record-element>>
+  public static boolean record_body(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "record_body")) return false;
+    if (!nextTokenIs(b, BRACE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = block(b, l + 1, WitParser::record_element);
+    exit_section_(b, m, RECORD_BODY, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -894,7 +914,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_RESOURCE identifier-safe (BRACE_L resource-element* BRACE_R)?
+  // annotations KW_RESOURCE identifier-safe resource-body?
   public static boolean resource(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "resource")) return false;
     if (!nextTokenIs(b, "<resource>", AT, KW_RESOURCE)) return false;
@@ -909,34 +929,23 @@ public class WitParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (BRACE_L resource-element* BRACE_R)?
+  // resource-body?
   private static boolean resource_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "resource_3")) return false;
-    resource_3_0(b, l + 1);
+    resource_body(b, l + 1);
     return true;
   }
 
-  // BRACE_L resource-element* BRACE_R
-  private static boolean resource_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "resource_3_0")) return false;
+  /* ********************************************************** */
+  // <<block resource-element>>
+  public static boolean resource_body(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "resource_body")) return false;
+    if (!nextTokenIs(b, BRACE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, BRACE_L);
-    r = r && resource_3_0_1(b, l + 1);
-    r = r && consumeToken(b, BRACE_R);
-    exit_section_(b, m, null, r);
+    r = block(b, l + 1, WitParser::resource_element);
+    exit_section_(b, m, RESOURCE_BODY, r);
     return r;
-  }
-
-  // resource-element*
-  private static boolean resource_3_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "resource_3_0_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!resource_element(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "resource_3_0_1", c)) break;
-    }
-    return true;
   }
 
   /* ********************************************************** */
@@ -983,65 +992,15 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PARENTHESIS_L (parameter (COMMA parameter)* COMMA?)? PARENTHESIS_R
+  // <<parenthesis parameter>>
   public static boolean tuple(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "tuple")) return false;
     if (!nextTokenIs(b, PARENTHESIS_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, PARENTHESIS_L);
-    r = r && tuple_1(b, l + 1);
-    r = r && consumeToken(b, PARENTHESIS_R);
+    r = parenthesis(b, l + 1, WitParser::parameter);
     exit_section_(b, m, TUPLE, r);
     return r;
-  }
-
-  // (parameter (COMMA parameter)* COMMA?)?
-  private static boolean tuple_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "tuple_1")) return false;
-    tuple_1_0(b, l + 1);
-    return true;
-  }
-
-  // parameter (COMMA parameter)* COMMA?
-  private static boolean tuple_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "tuple_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = parameter(b, l + 1);
-    r = r && tuple_1_0_1(b, l + 1);
-    r = r && tuple_1_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (COMMA parameter)*
-  private static boolean tuple_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "tuple_1_0_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!tuple_1_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "tuple_1_0_1", c)) break;
-    }
-    return true;
-  }
-
-  // COMMA parameter
-  private static boolean tuple_1_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "tuple_1_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && parameter(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // COMMA?
-  private static boolean tuple_1_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "tuple_1_0_2")) return false;
-    consumeToken(b, COMMA);
-    return true;
   }
 
   /* ********************************************************** */
@@ -1100,8 +1059,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier-safe (KW_AS alias-name)? {
-  // }
+  // identifier-safe (KW_AS alias-name)?
   public static boolean use_alias(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "use_alias")) return false;
     if (!nextTokenIs(b, "<use alias>", ESCAPED, SYMBOL)) return false;
@@ -1109,7 +1067,6 @@ public class WitParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, USE_ALIAS, "<use alias>");
     r = identifier_safe(b, l + 1);
     r = r && use_alias_1(b, l + 1);
-    r = r && use_alias_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -1132,77 +1089,34 @@ public class WitParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // {
-  // }
-  private static boolean use_alias_2(PsiBuilder b, int l) {
-    return true;
+  /* ********************************************************** */
+  // <<brace use-alias>>
+  public static boolean use_body(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "use_body")) return false;
+    if (!nextTokenIs(b, BRACE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = brace(b, l + 1, WitParser::use_alias);
+    exit_section_(b, m, USE_BODY, r);
+    return r;
   }
 
   /* ********************************************************** */
-  // DOT BRACE_L (use-alias (COMMA use-alias)* COMMA?)? BRACE_R
+  // DOT use-body
   public static boolean use_items(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "use_items")) return false;
     if (!nextTokenIs(b, DOT)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, USE_ITEMS, null);
-    r = consumeTokens(b, 1, DOT, BRACE_L);
+    r = consumeToken(b, DOT);
     p = r; // pin = 1
-    r = r && report_error_(b, use_items_2(b, l + 1));
-    r = p && consumeToken(b, BRACE_R) && r;
+    r = r && use_body(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // (use-alias (COMMA use-alias)* COMMA?)?
-  private static boolean use_items_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "use_items_2")) return false;
-    use_items_2_0(b, l + 1);
-    return true;
-  }
-
-  // use-alias (COMMA use-alias)* COMMA?
-  private static boolean use_items_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "use_items_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = use_alias(b, l + 1);
-    r = r && use_items_2_0_1(b, l + 1);
-    r = r && use_items_2_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (COMMA use-alias)*
-  private static boolean use_items_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "use_items_2_0_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!use_items_2_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "use_items_2_0_1", c)) break;
-    }
-    return true;
-  }
-
-  // COMMA use-alias
-  private static boolean use_items_2_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "use_items_2_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && use_alias(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // COMMA?
-  private static boolean use_items_2_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "use_items_2_0_2")) return false;
-    consumeToken(b, COMMA);
-    return true;
-  }
-
   /* ********************************************************** */
-  // annotations KW_VARIANT identifier-safe BRACE_L (variant-item (COMMA variant-item)* COMMA?)? BRACE_R
+  // annotations KW_VARIANT identifier-free variant-body
   public static boolean variant(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "variant")) return false;
     if (!nextTokenIs(b, "<variant>", AT, KW_VARIANT)) return false;
@@ -1211,60 +1125,22 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_VARIANT);
     p = r; // pin = 2
-    r = r && report_error_(b, identifier_safe(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, BRACE_L)) && r;
-    r = p && report_error_(b, variant_4(b, l + 1)) && r;
-    r = p && consumeToken(b, BRACE_R) && r;
+    r = r && report_error_(b, identifier_free(b, l + 1));
+    r = p && variant_body(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // (variant-item (COMMA variant-item)* COMMA?)?
-  private static boolean variant_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "variant_4")) return false;
-    variant_4_0(b, l + 1);
-    return true;
-  }
-
-  // variant-item (COMMA variant-item)* COMMA?
-  private static boolean variant_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "variant_4_0")) return false;
+  /* ********************************************************** */
+  // <<brace variant-item>>
+  public static boolean variant_body(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "variant_body")) return false;
+    if (!nextTokenIs(b, BRACE_L)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = variant_item(b, l + 1);
-    r = r && variant_4_0_1(b, l + 1);
-    r = r && variant_4_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
+    r = brace(b, l + 1, WitParser::variant_item);
+    exit_section_(b, m, VARIANT_BODY, r);
     return r;
-  }
-
-  // (COMMA variant-item)*
-  private static boolean variant_4_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "variant_4_0_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!variant_4_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "variant_4_0_1", c)) break;
-    }
-    return true;
-  }
-
-  // COMMA variant-item
-  private static boolean variant_4_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "variant_4_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && variant_item(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // COMMA?
-  private static boolean variant_4_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "variant_4_0_2")) return false;
-    consumeToken(b, COMMA);
-    return true;
   }
 
   /* ********************************************************** */
@@ -1312,7 +1188,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // annotations KW_WORLD identifier-safe BRACE_L world-element* BRACE_R
+  // annotations KW_WORLD identifier-free world-body
   public static boolean world(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "world")) return false;
     if (!nextTokenIs(b, "<world>", AT, KW_WORLD)) return false;
@@ -1321,23 +1197,22 @@ public class WitParser implements PsiParser, LightPsiParser {
     r = annotations(b, l + 1);
     r = r && consumeToken(b, KW_WORLD);
     p = r; // pin = 2
-    r = r && report_error_(b, identifier_safe(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, BRACE_L)) && r;
-    r = p && report_error_(b, world_4(b, l + 1)) && r;
-    r = p && consumeToken(b, BRACE_R) && r;
+    r = r && report_error_(b, identifier_free(b, l + 1));
+    r = p && world_body(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // world-element*
-  private static boolean world_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "world_4")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!world_element(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "world_4", c)) break;
-    }
-    return true;
+  /* ********************************************************** */
+  // <<block world-element>>
+  public static boolean world_body(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "world_body")) return false;
+    if (!nextTokenIs(b, BRACE_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = block(b, l + 1, WitParser::world_element);
+    exit_section_(b, m, WORLD_BODY, r);
+    return r;
   }
 
   /* ********************************************************** */

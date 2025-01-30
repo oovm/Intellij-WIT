@@ -13,7 +13,7 @@ public interface WitRecord extends PsiElement {
   @Nullable
   WitIdentifierSafe getIdentifierSafe();
 
-  @NotNull
-  List<WitRecordField> getRecordFieldList();
+  @Nullable
+  WitRecordBody getRecordBody();
 
 }

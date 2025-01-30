@@ -11,9 +11,9 @@ public interface WitFlags extends PsiElement {
   WitAnnotations getAnnotations();
 
   @Nullable
-  WitIdentifierSafe getIdentifierSafe();
+  WitFlagsBody getFlagsBody();
 
-  @NotNull
-  List<WitSemanticNumber> getSemanticNumberList();
+  @Nullable
+  WitIdentifierFree getIdentifierFree();
 
 }

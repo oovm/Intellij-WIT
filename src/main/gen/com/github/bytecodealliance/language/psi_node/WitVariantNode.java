@@ -35,14 +35,14 @@ public class WitVariantNode extends MixinVariant implements WitVariant {
 
   @Override
   @Nullable
-  public WitIdentifierSafe getIdentifierSafe() {
-    return findChildByClass(WitIdentifierSafe.class);
+  public WitIdentifierFree getIdentifierFree() {
+    return findChildByClass(WitIdentifierFree.class);
   }
 
   @Override
-  @NotNull
-  public List<WitVariantItem> getVariantItemList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitVariantItem.class);
+  @Nullable
+  public WitVariantBody getVariantBody() {
+    return findChildByClass(WitVariantBody.class);
   }
 
 }

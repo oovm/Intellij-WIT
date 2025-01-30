@@ -10,34 +10,10 @@ public interface WitWorld extends PsiElement {
   @NotNull
   WitAnnotations getAnnotations();
 
-  @NotNull
-  List<WitDefineType> getDefineTypeList();
-
-  @NotNull
-  List<WitEnum> getEnumList();
-
-  @NotNull
-  List<WitExport> getExportList();
+  @Nullable
+  WitIdentifierFree getIdentifierFree();
 
   @Nullable
-  WitIdentifierSafe getIdentifierSafe();
-
-  @NotNull
-  List<WitImport> getImportList();
-
-  @NotNull
-  List<WitInclude> getIncludeList();
-
-  @NotNull
-  List<WitRecord> getRecordList();
-
-  @NotNull
-  List<WitResource> getResourceList();
-
-  @NotNull
-  List<WitUse> getUseList();
-
-  @NotNull
-  List<WitVariant> getVariantList();
+  WitWorldBody getWorldBody();
 
 }
