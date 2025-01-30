@@ -29,8 +29,8 @@ public class WitAnnotationBodyNode extends WitElement implements WitAnnotationBo
 
   @Override
   @NotNull
-  public List<WitAnnotationTerm> getAnnotationTermList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitAnnotationTerm.class);
+  public List<WitAnnotationPair> getAnnotationPairList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, WitAnnotationPair.class);
   }
 
 }

@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface WitAnnotationTerm extends PsiElement {
+public interface WitAnnotationPair extends PsiElement {
 
   @NotNull
-  List<WitIdentifier> getIdentifierList();
+  WitAnnotationValue getAnnotationValue();
+
+  @NotNull
+  WitIdentifier getIdentifier();
 
 }

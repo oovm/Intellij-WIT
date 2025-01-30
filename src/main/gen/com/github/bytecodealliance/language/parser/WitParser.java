@@ -56,9 +56,9 @@ public class WitParser implements PsiParser, LightPsiParser {
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, ANNOTATION, null);
     r = consumeToken(b, AT);
-    r = r && identifier_free(b, l + 1);
-    p = r; // pin = 2
-    r = r && annotation_2(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, identifier_free(b, l + 1));
+    r = p && annotation_2(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -71,7 +71,7 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PARENTHESIS_L (annotation-term (COMMA annotation-term)* COMMA?)? PARENTHESIS_R
+  // PARENTHESIS_L (annotation-pair (COMMA annotation-pair)* COMMA?)? PARENTHESIS_R
   public static boolean annotation_body(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation_body")) return false;
     if (!nextTokenIs(b, PARENTHESIS_L)) return false;
@@ -84,26 +84,26 @@ public class WitParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (annotation-term (COMMA annotation-term)* COMMA?)?
+  // (annotation-pair (COMMA annotation-pair)* COMMA?)?
   private static boolean annotation_body_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation_body_1")) return false;
     annotation_body_1_0(b, l + 1);
     return true;
   }
 
-  // annotation-term (COMMA annotation-term)* COMMA?
+  // annotation-pair (COMMA annotation-pair)* COMMA?
   private static boolean annotation_body_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation_body_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = annotation_term(b, l + 1);
+    r = annotation_pair(b, l + 1);
     r = r && annotation_body_1_0_1(b, l + 1);
     r = r && annotation_body_1_0_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (COMMA annotation-term)*
+  // (COMMA annotation-pair)*
   private static boolean annotation_body_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation_body_1_0_1")) return false;
     while (true) {
@@ -114,13 +114,13 @@ public class WitParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // COMMA annotation-term
+  // COMMA annotation-pair
   private static boolean annotation_body_1_0_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "annotation_body_1_0_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && annotation_term(b, l + 1);
+    r = r && annotation_pair(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -133,25 +133,29 @@ public class WitParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier EQ (VERSION|identifier)
-  public static boolean annotation_term(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_term")) return false;
-    if (!nextTokenIs(b, "<annotation term>", ESCAPED, SYMBOL)) return false;
+  // identifier EQ annotation-value
+  public static boolean annotation_pair(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_pair")) return false;
+    if (!nextTokenIs(b, "<annotation pair>", ESCAPED, SYMBOL)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, ANNOTATION_TERM, "<annotation term>");
+    Marker m = enter_section_(b, l, _NONE_, ANNOTATION_PAIR, "<annotation pair>");
     r = identifier(b, l + 1);
     r = r && consumeToken(b, EQ);
-    r = r && annotation_term_2(b, l + 1);
+    r = r && annotation_value(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // VERSION|identifier
-  private static boolean annotation_term_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "annotation_term_2")) return false;
+  /* ********************************************************** */
+  // VERSION
+  // 	| identifier
+  public static boolean annotation_value(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "annotation_value")) return false;
     boolean r;
+    Marker m = enter_section_(b, l, _NONE_, ANNOTATION_VALUE, "<annotation value>");
     r = consumeToken(b, VERSION);
     if (!r) r = identifier(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

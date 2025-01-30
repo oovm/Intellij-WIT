@@ -70,8 +70,8 @@ class WitHighlightVisitor : WitVisitor(), HighlightVisitor {
         highlight(o.identifierFree, SYM_BUILTIN)
     }
 
-    override fun visitAnnotationArguments(o: WitAnnotationArguments) {
-
+    override fun visitAnnotationPair(o: WitAnnotationPair) {
+        highlight(o.identifier, SYM_FIELD)
     }
 
     override fun visitModifier(o: WitModifier) {

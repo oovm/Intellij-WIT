@@ -34,9 +34,9 @@ public class WitAnnotationNode extends WitElement implements WitAnnotation {
   }
 
   @Override
-  @NotNull
+  @Nullable
   public WitIdentifierFree getIdentifierFree() {
-    return findNotNullChildByClass(WitIdentifierFree.class);
+    return findChildByClass(WitIdentifierFree.class);
   }
 
 }

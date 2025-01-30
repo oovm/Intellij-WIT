@@ -10,7 +10,7 @@ public interface WitAnnotation extends PsiElement {
   @Nullable
   WitAnnotationBody getAnnotationBody();
 
-  @NotNull
+  @Nullable
   WitIdentifierFree getIdentifierFree();
 
 }
